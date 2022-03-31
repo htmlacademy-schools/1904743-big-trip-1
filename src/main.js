@@ -4,6 +4,12 @@ import {renderTemplate, RenderPosition} from './render.js';
 import {createSortTemplate} from './view/sort-view.js';
 import {createListTemplate} from './view/list-view.js';
 import {createInfoTemplate} from './view/info-view.js';
+import {generateWayPoint} from './mock/wayPoint';
+
+const WAYPOINT_COUNT = 3;
+
+const wayPoint = Array.from({length: WAYPOINT_COUNT}, generateWayPoint);
+console.log(wayPoint);
 
 const siteHeaderElement = document.querySelector('.page-body');
 const siteMainElement = document.querySelector('.page-main');
