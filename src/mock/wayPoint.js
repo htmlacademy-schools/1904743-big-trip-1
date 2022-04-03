@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const getRandomInteger = (a = 0, b = 1) =>{
   const lower = Math.ceil(Math.min(a,b));
   const upper = Math.floor(Math.max(a,b));
@@ -19,9 +21,14 @@ const generateDescription = () =>{
     'Nunc fermentum tortor ac porta dapibus.',
     'In rutrum ac purus sit amet tempus.'
   ];
-  const randomIndex = getRandomInteger(0, descriptions.length - 1);
-
-  return descriptions[randomIndex];
+  let description = '';
+  for (let i = 0; i < getRandomInteger(1,5); i++){
+    const randomIndex = getRandomInteger(0, descriptions.length - 1);
+    if (!description.includes(descriptions[randomIndex])){
+      description += descriptions[randomIndex];
+    }
+  }
+  return description;
 };
 const generateCity = () => {
   const city = [
@@ -43,7 +50,7 @@ const generateOffers = () => {
       price: 80
     }, {
       id: 3,
-      title: 'Rent a car +€  200',
+      title: 'Rent a car',
       price: 200
     }, {
       id: 4,
@@ -67,19 +74,48 @@ const generateOffers = () => {
       price: 5
     }
   ];
+  const offer = [];
+  for (let i = 0; i < getRandomInteger(0,5); i++){
+    const randomIndex = getRandomInteger(0, offers.length - 1);
+    if (!offer.includes(offers[randomIndex])){
+      offer.push(offers[randomIndex]);
+    }
+  }
+  return offer;
+};
+const generatePointType = () => {
+  const type = [
+    'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
+  ];
+  const randomIndex = getRandomInteger(0, type.length - 1);
 
-  const randomIndex = getRandomInteger(0, offers.length - 1);
-
-  return offers[randomIndex];
+  return type[randomIndex];
+};
+const generatePictures = () => {
+  const pictures = [];
+  for (let i = 0; i < getRandomInteger(1,5); i++){
+    pictures.push(`http://picsum.photos/248/152?r=${  Math.random()}`);
+  }
+  return pictures;
+};
+const generateDate = () => {
+  const maxDayGap = 7;
+  const daysGap = getRandomInteger(0, maxDayGap);
+  return dayjs().add(daysGap, 'day').toDate();
 };
 
-export const generateWayPoint = () =>({
-  pointType: 'Taxi',
-  city: generateCity(),
-  offers: generateOffers(),
-  destinationNotitia:{
-    description: generateDescription(),
-    pictures: []
-  },
-  isFavorite: Boolean(getRandomInteger(0,1))
-});
+export const generateWayPoint = () =>{
+  const dates = generateDate();
+
+  return{
+    dates,
+    pointType: generatePointType(),
+    city: generateCity(),
+    offers: generateOffers(),
+    destinationInfo:{
+      description: generateDescription(),
+      pictures: generatePictures()
+    },
+    isFavorite: Boolean(getRandomInteger(0,1))
+  };
+};
