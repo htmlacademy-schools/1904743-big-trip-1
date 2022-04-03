@@ -1,5 +1,5 @@
 export const createListTemplate = () => (
-	`<ul class="trip-events__list">
+  `<ul class="trip-events__list">
             <li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
@@ -155,7 +155,6 @@ export const createListTemplate = () => (
                 </section>
               </form>
             </li>
-            
             <li class="trip-events__item">
               <div class="event">
                 <time class="event__date" datetime="2019-03-18">MAR 18</time>
@@ -231,4 +230,4 @@ export const createListTemplate = () => (
                 </button>
               </div>
             </li>
-          </ul>`)
+          </ul>`);
