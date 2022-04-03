@@ -6,7 +6,7 @@ import {createListTemplate} from './view/list-view.js';
 import {createInfoTemplate} from './view/info-view.js';
 import {generateWayPoint} from './mock/wayPoint';
 
-const WAYPOINT_COUNT = 3;
+const WAYPOINT_COUNT = 15;
 
 const wayPoint = Array.from({length: WAYPOINT_COUNT}, generateWayPoint);
 console.log(wayPoint);
