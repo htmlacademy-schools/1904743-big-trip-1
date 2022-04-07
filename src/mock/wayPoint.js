@@ -103,6 +103,24 @@ const generateDate = () => {
   const daysGap = getRandomInteger(0, maxDayGap);
   return dayjs().add(daysGap, 'day').toDate();
 };
+const generatePrice = () => {
+  let price = getRandomInteger(20, 600);
+  while (price % 10 !== 0){
+    price = getRandomInteger(20, 600);
+  }
+  return price;
+};
+const generateTimeBegin = () => {
+  const maxMinutesGap = 280;
+  const MinutesGap = getRandomInteger(0, maxMinutesGap);
+  return dayjs().add(MinutesGap, 'minutes').toDate();
+};
+const generateTimeEnd = () => {
+  const maxMinutesGap = 560;
+  const MinutesGap = getRandomInteger(280, maxMinutesGap);
+  return dayjs().add(MinutesGap, 'minutes').toDate();
+};
+
 
 export const generateWayPoint = () =>{
   const dates = generateDate();
@@ -112,10 +130,11 @@ export const generateWayPoint = () =>{
     pointType: generatePointType(),
     city: generateCity(),
     offers: generateOffers(),
-    destinationInfo:{
-      description: generateDescription(),
-      pictures: generatePictures()
-    },
+    description: generateDescription(),
+    pictures: generatePictures(),
+    price: generatePrice(),
+    timeBegin: generateTimeBegin(),
+    timeEnd: generateTimeEnd(),
     isFavorite: Boolean(getRandomInteger(0,1))
   };
 };
