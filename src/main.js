@@ -7,12 +7,11 @@ import {createAddNewPointTemplate} from './view/add-new-point-view.js';
 import {createEditPointTemplate} from './view/edit-point-view.js';
 import {createInfoTemplate} from './view/info-view.js';
 import {createListPointTemplate} from './view/list-point-view';
-//import {generateWayPoint} from './mock/wayPoint';
+import {generateWayPoint} from './mock/wayPoint';
 
-const WAYPOINT_COUNT = 3;
+const WAYPOINT_COUNT = 10;
 
-//const wayPoint = Array.from({length: WAYPOINT_COUNT}, generateWayPoint);
-//console.log(wayPoint);
+const wayPoint = Array.from({length: WAYPOINT_COUNT}, generateWayPoint);
 
 const siteHeaderElement = document.querySelector('.page-body');
 const siteMainElement = document.querySelector('.page-main');
@@ -31,7 +30,7 @@ renderTemplate(siteListPointElement, createEditPointTemplate(), RenderPosition.B
 renderTemplate(siteListPointElement, createAddNewPointTemplate(), RenderPosition.BEFOREEND);
 
 for (let i = 0; i < WAYPOINT_COUNT; i++){
-  renderTemplate(siteListPointElement, createWayPointTemplate(), RenderPosition.BEFOREEND);
+  renderTemplate(siteListPointElement, createWayPointTemplate(wayPoint[i]), RenderPosition.BEFOREEND);
 }
 
 renderTemplate(siteMenuElement, createSiteMenuTemplate(), RenderPosition.BEFOREEND);
