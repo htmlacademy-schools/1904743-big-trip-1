@@ -172,12 +172,10 @@ const generateOffers = (pointType) => {
           id: 6,
           title: 'Book tickets',
           price: 40,
-          checked: Boolean(getRandomInteger(0,1))
         },{
           id: 7,
           title: 'Lunch in city',
           price: 30,
-          checked: false
         }
       ]
     },{
@@ -187,12 +185,10 @@ const generateOffers = (pointType) => {
           id: 18,
           title: 'Tips',
           price: 15,
-          checked: false
         },{
           id: 19,
           title: 'Book a seat',
           price: 20,
-          checked: false
         }
       ]
     }
