@@ -6,30 +6,28 @@ import {createWayPointTemplate} from './view/way-point-view.js';
 import {createAddNewPointTemplate} from './view/add-new-point-view.js';
 import {createEditPointTemplate} from './view/edit-point-view.js';
 import {createInfoTemplate} from './view/info-view.js';
-import {createListPointTemplate} from './view/list-point-view';
 import {generateWayPoint} from './mock/wayPoint';
 
-const WAYPOINT_COUNT = 10;
+const WAYPOINT_COUNT = 4;
 
 const wayPoint = Array.from({length: WAYPOINT_COUNT}, generateWayPoint);
+console.log(wayPoint)
 
 const siteHeaderElement = document.querySelector('.page-body');
 const siteMainElement = document.querySelector('.page-main');
 const siteMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
 const siteFilterElement = siteHeaderElement.querySelector('.trip-controls__filters');
 const siteSortElement = siteMainElement.querySelector('.trip-events');
-const sitePointElement = siteMainElement.querySelector('.trip-events');
 const siteInfoElement = siteHeaderElement.querySelector('.trip-main');
 
 renderTemplate(siteSortElement, createSortTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(sitePointElement,createListPointTemplate(), RenderPosition.BEFOREEND);
 
 const siteListPointElement = siteMainElement.querySelector('.trip-events__list');
 
-renderTemplate(siteListPointElement, createEditPointTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(siteListPointElement, createEditPointTemplate(wayPoint[0]), RenderPosition.BEFOREEND);
 renderTemplate(siteListPointElement, createAddNewPointTemplate(), RenderPosition.BEFOREEND);
 
-for (let i = 0; i < WAYPOINT_COUNT; i++){
+for (let i = 1; i < WAYPOINT_COUNT; i++){
   renderTemplate(siteListPointElement, createWayPointTemplate(wayPoint[i]), RenderPosition.BEFOREEND);
 }
 

@@ -1,21 +1,22 @@
 import dayjs from 'dayjs';
+import {getRandomInteger} from '../utils';
 
 export const createWayPointTemplate = (wayPoint) => {
-
   const {city, pointType, dates, isFavorite, offers, price, timeBegin, timeEnd} = wayPoint;
 
   const date = dayjs(dates).format('MMM D');
-  const favorite = isFavorite !== false
-    ? 'event__favorite-btn--active'
-    : '';
   const timeStart = dayjs(timeBegin).format('hh:mm');
   const timeFinish = dayjs(timeEnd).format('hh:mm');
 
-  const createOffersElement = (offer) =>`<li class="event__offer">
+  const favorite = isFavorite !== false
+    ? 'event__favorite-btn--active'
+    : '';
+
+  const createOffersElement = (offer) =>`${Boolean(getRandomInteger(0,1)) === true ? `<li class="event__offer">
       <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${offer.price}</span>
-    </li>`;
+    </li>`:''}`;
   const offersElements = offers.map(createOffersElement).join('');
 
   return `<li class="trip-events__item">
