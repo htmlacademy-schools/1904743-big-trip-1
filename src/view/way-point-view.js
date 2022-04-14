@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../utils';
+import {createElement} from '../render';
 
-export const createWayPointTemplate = (wayPoint) => {
+const createWayPointTemplate = (wayPoint) => {
   const {city, pointType, dates, isFavorite, offers, price, timeBegin, timeEnd} = wayPoint;
 
   const date = dayjs(dates).format('MMM D');
@@ -12,7 +12,7 @@ export const createWayPointTemplate = (wayPoint) => {
     ? 'event__favorite-btn--active'
     : '';
 
-  const createOffersElement = (offer) =>`${Boolean(getRandomInteger(0,1)) === true ? `<li class="event__offer">
+  const createOffersElement = (offer) =>`${offer.checked === true ? `<li class="event__offer">
       <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${offer.price}</span>
@@ -53,5 +53,30 @@ export const createWayPointTemplate = (wayPoint) => {
               </div>
             </li>`;
 };
+
+export default class WayPointView {
+  #element = null;
+  #wayPoint = null;
+
+  constructor(wayPoint) {
+    this.#wayPoint = wayPoint;
+  }
+
+  get element() {
+    if (!this.#element){
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template(){
+    return createWayPointTemplate(this.#wayPoint);
+  }
+
+  removeElement(){
+    this.#element = null;
+  }
+}
 
 

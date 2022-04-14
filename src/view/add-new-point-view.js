@@ -1,4 +1,6 @@
-export const createAddNewPointTemplate = (wayPoint= {}) => {
+import {createElement} from '../render';
+
+const createAddNewPointTemplate = (wayPoint= {}) => {
   const{
     city = '',
     pointType = '',
@@ -140,3 +142,28 @@ export const createAddNewPointTemplate = (wayPoint= {}) => {
     </form>
   </li>`;
 };
+
+export default class AddNewPointView {
+  #element = null;
+  #wayPoint = null;
+
+  constructor(wayPoint) {
+    this.#wayPoint = wayPoint;
+  }
+
+  get element() {
+    if (!this.#element){
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template(){
+    return createAddNewPointTemplate(this.#wayPoint);
+  }
+
+  removeElement(){
+    this.#element = null;
+  }
+}
