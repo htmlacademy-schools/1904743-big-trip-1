@@ -195,6 +195,9 @@ const generateOffers = (pointType) => {
   ];
   for(let i=0; i < offer.length; i++){
     if (offer[i].type === pointType){
+      for (let j = 0; j < offer[i].offers.length; j++){
+        offer[i].offers[j].checked = Boolean(getRandomInteger(0,1));
+      }
       return offer[i].offers;
     }
   }
