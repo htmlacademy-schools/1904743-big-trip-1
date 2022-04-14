@@ -1,36 +1,68 @@
-import {createSiteMenuTemplate} from './view/site-menu-view.js';
-import {createFilterTemplate} from './view/filter-view.js';
-import {renderTemplate, RenderPosition} from './render.js';
-import {createSortTemplate} from './view/sort-view.js';
-import {createWayPointTemplate} from './view/way-point-view.js';
-import {createAddNewPointTemplate} from './view/add-new-point-view.js';
-import {createEditPointTemplate} from './view/edit-point-view.js';
-import {createInfoTemplate} from './view/info-view.js';
+import SiteMenuView from './view/site-menu-view.js';
+import EventsListView from './view/events-list-view';
+import InfoView from './view/info-view.js';
+import SortView from './view/sort-view.js';
+import FilterView from './view/filter-view.js';
+import WayPointView from './view/way-point-view';
+//import AddNewPointView from './view/add-new-point-view';
+import EditPointView from './view/edit-point-view';
 import {generateWayPoint} from './mock/wayPoint';
+import {render, RenderPosition} from './render';
 
-const WAYPOINT_COUNT = 4;
+const WAYPOINT_COUNT = 5;
 
 const wayPoint = Array.from({length: WAYPOINT_COUNT}, generateWayPoint);
-console.log(wayPoint)
 
 const siteHeaderElement = document.querySelector('.page-body');
 const siteMainElement = document.querySelector('.page-main');
 const siteMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
 const siteFilterElement = siteHeaderElement.querySelector('.trip-controls__filters');
-const siteSortElement = siteMainElement.querySelector('.trip-events');
+const siteSortAndEventsElement = siteMainElement.querySelector('.trip-events');
 const siteInfoElement = siteHeaderElement.querySelector('.trip-main');
 
-renderTemplate(siteSortElement, createSortTemplate(), RenderPosition.BEFOREEND);
+render(siteSortAndEventsElement, new SortView().element, RenderPosition.BEFOREEND);
 
-const siteListPointElement = siteMainElement.querySelector('.trip-events__list');
+const eventsListComponent = new EventsListView();
 
-renderTemplate(siteListPointElement, createEditPointTemplate(wayPoint[0]), RenderPosition.BEFOREEND);
-renderTemplate(siteListPointElement, createAddNewPointTemplate(), RenderPosition.BEFOREEND);
+const renderWayPoint = (eventsListElement, event) =>{
+  const wayPointComponent = new WayPointView(event);
+  const wayPointEditComponent = new EditPointView(event);
 
-for (let i = 1; i < WAYPOINT_COUNT; i++){
-  renderTemplate(siteListPointElement, createWayPointTemplate(wayPoint[i]), RenderPosition.BEFOREEND);
+  const replaceCardToForm = () => {
+    eventsListElement.replaceChild(wayPointEditComponent.element, wayPointComponent.element);
+  };
+  const replaceFormToCard = () => {
+    eventsListElement.replaceChild(wayPointComponent.element, wayPointEditComponent.element);
+  };
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc'){
+      evt.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+  wayPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click',() => {
+    replaceCardToForm();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+  wayPointEditComponent.element.querySelector('form').addEventListener('submit',(evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
+  });
+
+
+  render(eventsListElement, wayPointComponent.element, RenderPosition.BEFOREEND);
+};
+
+render(siteSortAndEventsElement, eventsListComponent.element, RenderPosition.BEFOREEND);
+//render(eventsListComponent.element, new EditPointView(wayPoint[0]).element, RenderPosition.BEFOREEND);
+//render(eventsListComponent.element, new AddNewPointView(wayPoint).element, RenderPosition.BEFOREEND);
+
+for (let i = 0; i < WAYPOINT_COUNT; i++){
+  renderWayPoint(eventsListComponent.element, wayPoint[i]);
 }
 
-renderTemplate(siteMenuElement, createSiteMenuTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(siteFilterElement, createFilterTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(siteInfoElement, createInfoTemplate(), RenderPosition.AFTERBEGIN);
+render(siteMenuElement, new SiteMenuView().element, RenderPosition.BEFOREEND);
+render(siteFilterElement, new FilterView().element, RenderPosition.BEFOREEND);
+render(siteInfoElement, new InfoView().element, RenderPosition.AFTERBEGIN);
