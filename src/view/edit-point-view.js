@@ -1,7 +1,19 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../utils';
+import {createElement} from '../render';
 
-export const createEditPointTemplate = (wayPoint) => {
+const BLANK_WAYPOINT = {
+  city: '',
+  pointType: '',
+  price: '',
+  description: '',
+  offers: [],
+  pictures: [],
+  timeBegin: '',
+  timeEnd: '',
+  dates: ''
+};
+
+const createEditPointTemplate = (wayPoint) => {
   const{
     city,
     pointType,
@@ -20,7 +32,7 @@ export const createEditPointTemplate = (wayPoint) => {
 
   const createOffersElement = (offer) =>`<div class="event__available-offers">
             <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer-luggage" ${Boolean(getRandomInteger(0,1)) === true ? 'checked' : ''}>
+              <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer-luggage" ${offer.checked === true ? 'checked' : ''}>
               <label class="event__offer-label" for="event-offer-luggage-1">
                 <span class="event__offer-title">${offer.title}</span>
                 &plus;&euro;&nbsp;
@@ -153,3 +165,28 @@ export const createEditPointTemplate = (wayPoint) => {
               </form>
             </li>`;
 };
+
+export default class EditPointView {
+  #element = null;
+  #wayPoint = null;
+
+  constructor(wayPoint = BLANK_WAYPOINT) {
+    this.#wayPoint = wayPoint;
+  }
+
+  get element() {
+    if (!this.#element){
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template(){
+    return createEditPointTemplate(this.#wayPoint);
+  }
+
+  removeElement(){
+    this.#element = null;
+  }
+}
