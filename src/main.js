@@ -4,12 +4,13 @@ import InfoView from './view/info-view.js';
 import SortView from './view/sort-view.js';
 import FilterView from './view/filter-view.js';
 import WayPointView from './view/way-point-view';
-//import AddNewPointView from './view/add-new-point-view';
+import NoEventsView from './view/no-events-view';
 import EditPointView from './view/edit-point-view';
 import {generateWayPoint} from './mock/wayPoint';
 import {render, RenderPosition} from './render';
+//import AddNewPointView from './view/add-new-point-view';
 
-const WAYPOINT_COUNT = 5;
+const WAYPOINT_COUNT = 10;
 
 const wayPoint = Array.from({length: WAYPOINT_COUNT}, generateWayPoint);
 
@@ -20,7 +21,12 @@ const siteFilterElement = siteHeaderElement.querySelector('.trip-controls__filte
 const siteSortAndEventsElement = siteMainElement.querySelector('.trip-events');
 const siteInfoElement = siteHeaderElement.querySelector('.trip-main');
 
-render(siteSortAndEventsElement, new SortView().element, RenderPosition.BEFOREEND);
+if (wayPoint.length === 0){
+  render(siteSortAndEventsElement, new NoEventsView().element, RenderPosition.BEFOREEND);
+} else {
+  render(siteSortAndEventsElement, new SortView().element, RenderPosition.BEFOREEND);
+}
+//render(siteSortAndEventsElement, new SortView().element, RenderPosition.BEFOREEND);
 
 const eventsListComponent = new EventsListView();
 
@@ -50,10 +56,14 @@ const renderWayPoint = (eventsListElement, event) =>{
     evt.preventDefault();
     replaceFormToCard();
   });
-
+  wayPointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click',(evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
+  });
 
   render(eventsListElement, wayPointComponent.element, RenderPosition.BEFOREEND);
 };
+
 
 render(siteSortAndEventsElement, eventsListComponent.element, RenderPosition.BEFOREEND);
 //render(eventsListComponent.element, new EditPointView(wayPoint[0]).element, RenderPosition.BEFOREEND);
