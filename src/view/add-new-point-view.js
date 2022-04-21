@@ -1,4 +1,4 @@
-import {createElement} from '../render';
+import AbstractView from './abstract-view';
 
 const createAddNewPointTemplate = (wayPoint= {}) => {
   const{
@@ -143,27 +143,15 @@ const createAddNewPointTemplate = (wayPoint= {}) => {
   </li>`;
 };
 
-export default class AddNewPointView {
-  #element = null;
+export default class AddNewPointView extends AbstractView{
   #wayPoint = null;
 
   constructor(wayPoint) {
+    super();
     this.#wayPoint = wayPoint;
-  }
-
-  get element() {
-    if (!this.#element){
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template(){
     return createAddNewPointTemplate(this.#wayPoint);
-  }
-
-  removeElement(){
-    this.#element = null;
   }
 }

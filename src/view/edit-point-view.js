@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../render';
+import AbstractView from './abstract-view';
 
 const BLANK_WAYPOINT = {
   city: '',
@@ -166,27 +166,26 @@ const createEditPointTemplate = (wayPoint) => {
             </li>`;
 };
 
-export default class EditPointView {
-  #element = null;
+export default class EditPointView extends AbstractView{
   #wayPoint = null;
 
   constructor(wayPoint = BLANK_WAYPOINT) {
+    super();
     this.#wayPoint = wayPoint;
-  }
-
-  get element() {
-    if (!this.#element){
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template(){
     return createEditPointTemplate(this.#wayPoint);
   }
 
-  removeElement(){
-    this.#element = null;
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 }
