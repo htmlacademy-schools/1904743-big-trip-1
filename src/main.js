@@ -7,7 +7,7 @@ import WayPointView from './view/way-point-view';
 import NoEventsView from './view/no-events-view';
 import EditPointView from './view/edit-point-view';
 import {generateWayPoint} from './mock/wayPoint';
-import {render, RenderPosition, replace, remove} from './utils/render';
+import {render, RenderPosition, replace} from './utils/render';
 //import AddNewPointView from './view/add-new-point-view';
 
 const WAYPOINT_COUNT = 10;
