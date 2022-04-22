@@ -7,7 +7,7 @@ import WayPointView from './view/way-point-view';
 import NoEventsView from './view/no-events-view';
 import EditPointView from './view/edit-point-view';
 import {generateWayPoint} from './mock/wayPoint';
-import {render, RenderPosition} from './render';
+import {render, RenderPosition, replace} from './utils/render';
 //import AddNewPointView from './view/add-new-point-view';
 
 const WAYPOINT_COUNT = 10;
@@ -22,9 +22,9 @@ const siteSortAndEventsElement = siteMainElement.querySelector('.trip-events');
 const siteInfoElement = siteHeaderElement.querySelector('.trip-main');
 
 if (wayPoint.length === 0){
-  render(siteSortAndEventsElement, new NoEventsView().element, RenderPosition.BEFOREEND);
+  render(siteSortAndEventsElement, new NoEventsView(), RenderPosition.BEFOREEND);
 } else {
-  render(siteSortAndEventsElement, new SortView().element, RenderPosition.BEFOREEND);
+  render(siteSortAndEventsElement, new SortView(), RenderPosition.BEFOREEND);
 }
 //render(siteSortAndEventsElement, new SortView().element, RenderPosition.BEFOREEND);
 
@@ -35,10 +35,10 @@ const renderWayPoint = (eventsListElement, event) =>{
   const wayPointEditComponent = new EditPointView(event);
 
   const replaceCardToForm = () => {
-    eventsListElement.replaceChild(wayPointEditComponent.element, wayPointComponent.element);
+    replace(wayPointEditComponent, wayPointComponent);
   };
   const replaceFormToCard = () => {
-    eventsListElement.replaceChild(wayPointComponent.element, wayPointEditComponent.element);
+    replace(wayPointComponent, wayPointEditComponent);
   };
   const onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc'){
@@ -48,24 +48,19 @@ const renderWayPoint = (eventsListElement, event) =>{
     }
   };
 
-  wayPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click',() => {
+  wayPointComponent.setEditClickHandler(() => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
-  wayPointEditComponent.element.querySelector('form').addEventListener('submit',(evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-  });
-  wayPointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click',(evt) => {
-    evt.preventDefault();
+  wayPointEditComponent.setFormSubmitHandler(() => {
     replaceFormToCard();
   });
 
-  render(eventsListElement, wayPointComponent.element, RenderPosition.BEFOREEND);
+  render(eventsListElement, wayPointComponent, RenderPosition.BEFOREEND);
 };
 
 
-render(siteSortAndEventsElement, eventsListComponent.element, RenderPosition.BEFOREEND);
+render(siteSortAndEventsElement, eventsListComponent, RenderPosition.BEFOREEND);
 //render(eventsListComponent.element, new EditPointView(wayPoint[0]).element, RenderPosition.BEFOREEND);
 //render(eventsListComponent.element, new AddNewPointView(wayPoint).element, RenderPosition.BEFOREEND);
 
@@ -73,6 +68,6 @@ for (let i = 0; i < WAYPOINT_COUNT; i++){
   renderWayPoint(eventsListComponent.element, wayPoint[i]);
 }
 
-render(siteMenuElement, new SiteMenuView().element, RenderPosition.BEFOREEND);
-render(siteFilterElement, new FilterView().element, RenderPosition.BEFOREEND);
-render(siteInfoElement, new InfoView().element, RenderPosition.AFTERBEGIN);
+render(siteMenuElement, new SiteMenuView(), RenderPosition.BEFOREEND);
+render(siteFilterElement, new FilterView(), RenderPosition.BEFOREEND);
+render(siteInfoElement, new InfoView(), RenderPosition.AFTERBEGIN);
