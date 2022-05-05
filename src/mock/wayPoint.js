@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../utils/common';
+import { getRandomInteger } from '../utils/common';
+import { nanoid } from 'nanoid';
 
 const generateDescription = () =>{
   const descriptions = [
@@ -237,7 +238,8 @@ export const generateWayPoint = () =>{
   const dates = generateDate();
   const pointType = generatePointType();
 
-  return{
+  return {
+    id: nanoid(),
     dates,
     pointType,
     city: generateCity(),
