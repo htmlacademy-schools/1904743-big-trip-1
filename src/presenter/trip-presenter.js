@@ -1,7 +1,7 @@
 import SortView from '../view/sort-view';
 import NoEventsView from '../view/no-events-view';
 import EventsListView from '../view/events-list-view';
-import { render, RenderPosition, replace } from '../utils/render';
+import { render, RenderPosition } from '../utils/render';
 import { updateItem } from '../utils/common';
 import PointPresenter from './point-presenter';
 
@@ -66,12 +66,12 @@ export default class TripPresenter {
   //}
 
   #renderEventsList = () => {
-    this.#renderEvents(0, this.#tripEvents.length)
+    this.#renderEvents(0, this.#tripEvents.length);
   }
 
   #renderTrip = () => {
-    if (this.#tripEvents.length === 0) { this.#renderNoEvents() }
-    else { this.#renderSort() }
+    if (this.#tripEvents.length === 0) { this.#renderNoEvents(); }
+    else { this.#renderSort(); }
 
     this.#renderEventsList();
   }

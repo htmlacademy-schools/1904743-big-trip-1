@@ -2,7 +2,7 @@ import SiteMenuView from './view/site-menu-view.js';
 import InfoView from './view/info-view.js';
 import FilterView from './view/filter-view.js';
 import {generateWayPoint} from './mock/wayPoint';
-import { render, RenderPosition, replace } from './utils/render';
+import { render, RenderPosition } from './utils/render';
 import TripPresnter from './presenter/trip-presenter';
 
 const WAYPOINT_COUNT = 10;
@@ -22,4 +22,4 @@ render(siteMenuElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 render(siteFilterElement, new FilterView(), RenderPosition.BEFOREEND);
 render(siteInfoElement, new InfoView(), RenderPosition.AFTERBEGIN);
 
-tripPresenter.init(wayPoints)
+tripPresenter.init(wayPoints);

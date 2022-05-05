@@ -44,7 +44,7 @@ export default class PointPresenter {
       return;
     }
 
-    if (this.#mode === Mode.DEFAULT) { 
+    if (this.#mode === Mode.DEFAULT) {
       replace(this.#eventComponent, prevEventComponent);
     }
 
