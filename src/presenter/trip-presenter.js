@@ -3,6 +3,8 @@ import NoEventsView from '../view/no-events-view';
 import EventsListView from '../view/events-list-view';
 import { render, RenderPosition } from '../utils/render';
 import { updateItem } from '../utils/common';
+import { sortEventTime, sortEventPrice } from '../utils/wayPoint.js';
+import { SortType } from '../const.js';
 import PointPresenter from './point-presenter';
 
 export default class TripPresenter {
@@ -14,6 +16,8 @@ export default class TripPresenter {
 
   #tripEvents = [];
   #pointPresenter = new Map();
+  #currentSortType = SortType.DEFAULT;
+  #sourcedTripEvents = [];
 
   constructor(tripContainer) {
     this.#tripContainer = tripContainer;
@@ -21,6 +25,7 @@ export default class TripPresenter {
 
   init = (tripEvents) => {
     this.#tripEvents = [...tripEvents];
+    this.#sourcedTripEvents = [...tripEvents];
 
     render(this.#tripContainer, this.#eventsListComponent, RenderPosition.BEFOREEND);
 
@@ -32,19 +37,53 @@ export default class TripPresenter {
   }
 
 
-  #handleTaskChange = (updatedEvent) => {
+  #handleEventsChange = (updatedEvent) => {
     this.#tripEvents = updateItem(this.#tripEvents, updatedEvent);
+    this.#sourcedTripEvents = updateItem(this.#sourcedTripEvents, updatedEvent);
     this.#pointPresenter.get(updatedEvent.id).init(updatedEvent);
+  }
+
+  #sortEvents = (sortType) => {
+    // 2. Этот исходный массив задач необходим,
+    // потому что для сортировки мы будем мутировать
+    // массив в свойстве _boardTasks
+    switch (sortType) {
+      case SortType.Price:
+        this.#tripEvents.sort(sortEventPrice);
+        break;
+      case SortType.Time:
+        this.#tripEvents.sort(sortEventTime);
+        break;
+      case SortType.Day:
+        this.#tripEvents = [...this.#sourcedTripEvents];
+        break;
+      default:
+        // 3. А когда пользователь захочет "вернуть всё, как было",
+        // мы просто запишем в _boardTasks исходный массив
+        this.#tripEvents = [...this.#sourcedTripEvents];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortEvents(sortType);
+    this.#clearEventsList();
+    this.#renderEventsList();
   }
 
 
   #renderSort = () => {
     render(this.#tripContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
-
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   }
 
   #renderEvent = (event) => {
-    const pointPresenter = new PointPresenter(this.#eventsListComponent, this.#handleTaskChange, this.#handleModeChange);
+    const pointPresenter = new PointPresenter(this.#eventsListComponent, this.#handleEventsChange, this.#handleModeChange);
     pointPresenter.init(event);
     this.#pointPresenter.set(event.id, pointPresenter);
   }
@@ -59,11 +98,11 @@ export default class TripPresenter {
     render(this.#tripContainer, this.#noEventsComponent, RenderPosition.BEFOREEND);
   }
 
-  //#clearEventsList = () => {
-  //  this.#pointPresenter.forEach((presenter) => presenter.destroy());
-  //  this.#pointPresenter.clear();
-  //  this.#renderedEventCount = 10;
-  //}
+  #clearEventsList = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
+    //this.#renderedEventCount = 10;
+  }
 
   #renderEventsList = () => {
     this.#renderEvents(0, this.#tripEvents.length);
