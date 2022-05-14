@@ -3,9 +3,9 @@ import { SortType } from '../const';
 
 const createSortTemplate = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-            <div class="trip-sort__item  trip-sort__item--day">
+            <div class="trip-sort__item  trip-sort__item--day" data-sort-type="${SortType.Day}">
               <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked>
-              <label class="trip-sort__btn" for="sort-day" data-sort-type="${SortType.Day}">Day</label>
+              <label class="trip-sort__btn" for="sort-day">Day</label>
             </div>
 
             <div class="trip-sort__item  trip-sort__item--event">
@@ -13,14 +13,14 @@ const createSortTemplate = () => (
               <label class="trip-sort__btn" for="sort-event">Event</label>
             </div>
 
-            <div class="trip-sort__item  trip-sort__item--time">
+            <div class="trip-sort__item  trip-sort__item--time" data-sort-type="${SortType.Time}">
               <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
-              <label class="trip-sort__btn" for="sort-time" data-sort-type="${SortType.Time}">Time</label>
+              <label class="trip-sort__btn" for="sort-time">Time</label>
             </div>
 
-            <div class="trip-sort__item  trip-sort__item--price">
+            <div class="trip-sort__item  trip-sort__item--price" data-sort-type="${SortType.Price}">
               <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
-              <label class="trip-sort__btn" for="sort-price" data-sort-type="${SortType.Price}">Price</label>
+              <label class="trip-sort__btn" for="sort-price">Price</label>
             </div>
 
             <div class="trip-sort__item  trip-sort__item--offer">

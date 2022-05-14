@@ -1,13 +1,8 @@
+import {getRandomInteger} from './common';
 
-export const sortEventTime = (taskA, taskB) => {
-  return;
+export const sortEventTime = (eventA, eventB) => {
+  return 0;
 };
 
-export const sortEventPrice = (sourcedTripEvents) => {
-  sourcedTripEvents.sort(function (a, b) {
-    return b - a;
-  });
-  return sourcedTripEvents;
-};
-
+export const sortEventPrice = (eventA, eventB) => eventA.price > eventB.price ? 1 : -1;
 

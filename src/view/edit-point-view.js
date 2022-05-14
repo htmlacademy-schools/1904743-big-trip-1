@@ -10,7 +10,7 @@ const BLANK_WAYPOINT = {
   pictures: [],
   timeBegin: '',
   timeEnd: '',
-  dates: ''
+  dates: '',
 };
 
 const createEditPointTemplate = (wayPoint) => {
@@ -23,7 +23,7 @@ const createEditPointTemplate = (wayPoint) => {
     pictures ,
     timeBegin,
     timeEnd,
-    dates
+    dates,
   } = wayPoint;
 
   const date = dayjs(dates).format('DD/MM/YY');

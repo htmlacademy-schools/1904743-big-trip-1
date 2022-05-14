@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { getRandomInteger } from '../utils/common';
-import { nanoid } from 'nanoid';
+import {getRandomInteger} from '../utils/common';
+import {nanoid} from 'nanoid';
 
 const generateDescription = () =>{
   const descriptions = [
@@ -223,20 +223,23 @@ const generatePrice = () => {
   return price;
 };
 const generateTimeBegin = () => {
-  const maxMinutesGap = 280;
+  const maxMinutesGap = 180;
   const MinutesGap = getRandomInteger(0, maxMinutesGap);
-  return dayjs().add(MinutesGap, 'minutes').toDate();
+  return dayjs().add(MinutesGap, 'minute');
 };
 const generateTimeEnd = () => {
-  const maxMinutesGap = 560;
-  const MinutesGap = getRandomInteger(280, maxMinutesGap);
-  return dayjs().add(MinutesGap, 'minutes').toDate();
+  const maxMinutesGap = 360;
+  const MinutesGap = getRandomInteger(200, maxMinutesGap);
+  return dayjs().add(MinutesGap, 'minute');
 };
+const generateDuration = (timeBegin, timeEnd) => dayjs(timeEnd - timeBegin).subtract(5,'hour');
 
 
 export const generateWayPoint = () =>{
   const dates = generateDate();
   const pointType = generatePointType();
+  const timeBegin = generateTimeBegin();
+  const timeEnd = generateTimeEnd();
 
   return {
     id: nanoid(),
@@ -247,8 +250,9 @@ export const generateWayPoint = () =>{
     description: generateDescription(),
     pictures: generatePictures(),
     price: generatePrice(),
-    timeBegin: generateTimeBegin(),
-    timeEnd: generateTimeEnd(),
+    timeBegin,
+    timeEnd,
+    duration: generateDuration(timeBegin, timeEnd),
     isFavorite: Boolean(getRandomInteger(0,1))
   };
 };

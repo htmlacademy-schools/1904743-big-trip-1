@@ -16,7 +16,7 @@ export default class TripPresenter {
 
   #tripEvents = [];
   #pointPresenter = new Map();
-  #currentSortType = SortType.DEFAULT;
+  #currentSortType = SortType.Day;
   #sourcedTripEvents = [];
 
   constructor(tripContainer) {
@@ -44,9 +44,6 @@ export default class TripPresenter {
   }
 
   #sortEvents = (sortType) => {
-    // 2. Этот исходный массив задач необходим,
-    // потому что для сортировки мы будем мутировать
-    // массив в свойстве _boardTasks
     switch (sortType) {
       case SortType.Price:
         this.#tripEvents.sort(sortEventPrice);
@@ -58,8 +55,6 @@ export default class TripPresenter {
         this.#tripEvents = [...this.#sourcedTripEvents];
         break;
       default:
-        // 3. А когда пользователь захочет "вернуть всё, как было",
-        // мы просто запишем в _boardTasks исходный массив
         this.#tripEvents = [...this.#sourcedTripEvents];
     }
 
