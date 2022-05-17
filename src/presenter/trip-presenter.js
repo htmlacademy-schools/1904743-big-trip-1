@@ -3,7 +3,7 @@ import NoEventsView from '../view/no-events-view';
 import EventsListView from '../view/events-list-view';
 import { render, RenderPosition } from '../utils/render';
 import { updateItem } from '../utils/common';
-import { sortEventTime, sortEventPrice } from '../utils/wayPoint.js';
+import { sortEventTime, sortEventPrice, sortEvents } from '../utils/wayPoint.js';
 import { SortType } from '../const.js';
 import PointPresenter from './point-presenter';
 
@@ -24,8 +24,8 @@ export default class TripPresenter {
   }
 
   init = (tripEvents) => {
-    this.#tripEvents = [...tripEvents];
-    this.#sourcedTripEvents = [...tripEvents];
+    this.#tripEvents = [...tripEvents].sort(sortEvents);
+    this.#sourcedTripEvents = [...this.#tripEvents];
 
     render(this.#tripContainer, this.#eventsListComponent, RenderPosition.BEFOREEND);
 
