@@ -3,9 +3,9 @@ import { SortType } from '../const';
 
 const createSortTemplate = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-            <div class="trip-sort__item  trip-sort__item--day" data-sort-type="${SortType.Day}">
+            <div class="trip-sort__item  trip-sort__item--day">
               <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked>
-              <label class="trip-sort__btn" for="sort-day">Day</label>
+              <label class="trip-sort__btn" data-sort-type="${SortType.Day}" for="sort-day">Day</label>
             </div>
 
             <div class="trip-sort__item  trip-sort__item--event">
@@ -13,14 +13,14 @@ const createSortTemplate = () => (
               <label class="trip-sort__btn" for="sort-event">Event</label>
             </div>
 
-            <div class="trip-sort__item  trip-sort__item--time" data-sort-type="${SortType.Time}">
+            <div class="trip-sort__item  trip-sort__item--time">
               <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
-              <label class="trip-sort__btn" for="sort-time">Time</label>
+              <label class="trip-sort__btn" for="sort-time" data-sort-type="${SortType.Time}">Time</label>
             </div>
 
-            <div class="trip-sort__item  trip-sort__item--price" data-sort-type="${SortType.Price}">
+            <div class="trip-sort__item  trip-sort__item--price">
               <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
-              <label class="trip-sort__btn" for="sort-price">Price</label>
+              <label class="trip-sort__btn" for="sort-price" data-sort-type="${SortType.Price}">Price</label>
             </div>
 
             <div class="trip-sort__item  trip-sort__item--offer">
@@ -42,7 +42,7 @@ export default class SortView extends AbstractView{
   }
 
   #sortTypeChangeHandler = (evt) => {
-    if (evt.target.tagName !== 'A') {
+    if (evt.target.tagName !== 'LABEL') {
       return;
     }
 

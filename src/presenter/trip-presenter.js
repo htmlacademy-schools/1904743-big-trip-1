@@ -96,7 +96,6 @@ export default class TripPresenter {
   #clearEventsList = () => {
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
-    //this.#renderedEventCount = 10;
   }
 
   #renderEventsList = () => {

@@ -1,8 +1,5 @@
-import {getRandomInteger} from './common';
 
-export const sortEventTime = (eventA, eventB) => {
-  return 0;
-};
+export const sortEventTime = (eventA, eventB) => eventB.duration - eventA.duration;
 
-export const sortEventPrice = (eventA, eventB) => eventA.price > eventB.price ? 1 : -1;
+export const sortEventPrice = (eventA, eventB) => eventB.price - eventA.price;
 

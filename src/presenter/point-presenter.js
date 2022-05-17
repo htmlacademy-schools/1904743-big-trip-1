@@ -36,7 +36,6 @@ export default class PointPresenter {
 
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    //this.#eventComponent.setArchiveClickHandler(this.#handleArchiveClick);
     this.#eventEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
@@ -94,10 +93,6 @@ export default class PointPresenter {
   #handleFavoriteClick = () => {
     this.#changeData({ ...this.#event, isFavorite: !this.#event.isFavorite });
   }
-
-  //#handleArchiveClick = () => {
-  //  this.#changeData({ ...this.#event, isArchive: !this.#event.isArchive });
-  //}
 
   #handleFormSubmit = (event) => {
     this.#changeData(event);

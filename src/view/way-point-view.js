@@ -77,12 +77,6 @@ export default class WayPointView extends AbstractView{
     this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   }
 
-  //setArchiveClickHandler = (callback) => {
-  //  this._callback.archiveClick = callback;
-  //  this.element.querySelector('.card__btn--archive').addEventListener('click', this.#archiveClickHandler);
-  //}
-
-
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.editClick();
