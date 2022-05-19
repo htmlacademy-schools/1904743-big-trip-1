@@ -99,13 +99,12 @@ export default class TripPresenter {
   }
 
   #renderEventsList = () => {
+    this.#renderSort();
     this.#renderEvents(0, this.#tripEvents.length);
   }
 
   #renderTrip = () => {
     if (this.#tripEvents.length === 0) { this.#renderNoEvents(); }
-    else { this.#renderSort(); }
-
-    this.#renderEventsList();
+    else { this.#renderEventsList(); }
   }
 }
