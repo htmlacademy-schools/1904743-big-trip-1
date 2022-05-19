@@ -178,6 +178,16 @@ export default class EditPointView extends AbstractView{
     return createEditPointTemplate(this.#wayPoint);
   }
 
+  updateData = (update) => {
+    if (!update) {
+      return;
+    }
+
+    this._data = {...this._data, ...update};
+
+    this.updateElement();
+  }
+
   updateElement = () => {
     const prevElement = this.element;
     const parent = prevElement.parentElement;
