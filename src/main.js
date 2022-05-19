@@ -3,7 +3,7 @@ import InfoView from './view/info-view.js';
 import FilterView from './view/filter-view.js';
 import {generateWayPoint} from './mock/wayPoint';
 import { render, RenderPosition } from './utils/render';
-import TripPresnter from './presenter/trip-presenter';
+import TripPresenter from './presenter/trip-presenter';
 
 const WAYPOINT_COUNT = 10;
 
@@ -16,7 +16,7 @@ const siteFilterElement = siteHeaderElement.querySelector('.trip-controls__filte
 const siteSortAndEventsElement = siteMainElement.querySelector('.trip-events');
 const siteInfoElement = siteHeaderElement.querySelector('.trip-main');
 
-const tripPresenter = new TripPresnter(siteSortAndEventsElement);
+const tripPresenter = new TripPresenter(siteSortAndEventsElement);
 
 render(siteMenuElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 render(siteFilterElement, new FilterView(), RenderPosition.BEFOREEND);

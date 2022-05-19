@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\markup",
+    "\\src",
+    "\\src\\mock",
+    "\\src\\utils",
+    "\\src\\view"
+  ],
+  "SelectedNode": "\\src\\view\\sort-view.js",
+  "PreviewInSolutionExplorer": false
+}

@@ -2,11 +2,12 @@ import dayjs from 'dayjs';
 import AbstractView from './abstract-view';
 
 const createWayPointTemplate = (wayPoint) => {
-  const {city, pointType, dates, isFavorite, offers, price, timeBegin, timeEnd} = wayPoint;
+  const {city, pointType, dates, isFavorite, offers, price, timeBegin, timeEnd, duration} = wayPoint;
 
   const date = dayjs(dates).format('MMM D');
   const timeStart = dayjs(timeBegin).format('hh:mm');
   const timeFinish = dayjs(timeEnd).format('hh:mm');
+  const durationEvent = dayjs(duration).format('h[H] m[M]');
 
   const favorite = isFavorite !== false
     ? 'event__favorite-btn--active'
@@ -32,7 +33,7 @@ const createWayPointTemplate = (wayPoint) => {
                     &mdash;
                     <time class="event__end-time" datetime="2019-03-18T11:00">${timeFinish}</time>
                   </p>
-                  <p class="event__duration">30M</p>
+                  <p class="event__duration">${durationEvent}</p>
                 </div>
                 <p class="event__price">
                   &euro;&nbsp;<span class="event__price-value">${price}</span>
@@ -76,12 +77,6 @@ export default class WayPointView extends AbstractView{
     this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   }
 
-  //setArchiveClickHandler = (callback) => {
-  //  this._callback.archiveClick = callback;
-  //  this.element.querySelector('.card__btn--archive').addEventListener('click', this.#archiveClickHandler);
-  //}
-
-
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.editClick();
@@ -92,11 +87,6 @@ export default class WayPointView extends AbstractView{
     evt.preventDefault();
     this._callback.favoriteClick();
   }
-
-  //#archiveClickHandler = (evt) => {
-  //  evt.preventDefault();
-  //  this._callback.archiveClick();
-  //}
 }
 
 
