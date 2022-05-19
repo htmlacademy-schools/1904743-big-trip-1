@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import AbstractView from './abstract-view';
+import SmartView from './smart-view';
 
 const BLANK_WAYPOINT = {
   city: '',
@@ -166,7 +166,7 @@ const createEditPointTemplate = (wayPoint) => {
             </li>`;
 };
 
-export default class EditPointView extends AbstractView{
+export default class EditPointView extends SmartView{
   #wayPoint = null;
 
   constructor(wayPoint = BLANK_WAYPOINT) {
@@ -176,28 +176,6 @@ export default class EditPointView extends AbstractView{
 
   get template(){
     return createEditPointTemplate(this.#wayPoint);
-  }
-
-  updateData = (update) => {
-    if (!update) {
-      return;
-    }
-
-    this._data = {...this._data, ...update};
-
-    this.updateElement();
-  }
-
-  updateElement = () => {
-    const prevElement = this.element;
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.element;
-
-    parent.replaceChild(newElement, prevElement);
-
-    this.restoreHandlers();
   }
 
   restoreHandlers = () => {
