@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
 import AbstractView from './abstract-view';
+import {offersFilter} from '../utils/wayPoint';
 
 const createWayPointTemplate = (wayPoint) => {
   const {city, pointType, dates, isFavorite, offers, price, timeBegin, timeEnd, duration} = wayPoint;
 
+  const currentOffers = offersFilter(offers, pointType);
   const date = dayjs(dates).format('MMM D');
   const timeStart = dayjs(timeBegin).format('hh:mm');
   const timeFinish = dayjs(timeEnd).format('hh:mm');
@@ -13,12 +15,12 @@ const createWayPointTemplate = (wayPoint) => {
     ? 'event__favorite-btn--active'
     : '';
 
-  const createOffersElement = (offer) =>`${offer.checked === true ? `<li class="event__offer">
+  const createOffersElement = (offer) =>`<li class="event__offer">
       <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${offer.price}</span>
-    </li>`:''}`;
-  const offersElements = offers.map(createOffersElement).join('');
+    </li>`;
+  const offersElements = currentOffers.map(createOffersElement).join('');
 
   return `<li class="trip-events__item">
               <div class="event">
@@ -81,7 +83,6 @@ export default class WayPointView extends AbstractView{
     evt.preventDefault();
     this._callback.editClick();
   }
-
 
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
