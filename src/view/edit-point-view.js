@@ -153,6 +153,7 @@ const createEditPointTemplate = (data) => {
 };
 
 export default class EditPointView extends SmartView{
+  #datepicker = null;
 
   constructor(wayPoint = BLANK_WAYPOINT) {
     super();
@@ -163,6 +164,15 @@ export default class EditPointView extends SmartView{
 
   get template(){
     return createEditPointTemplate(this._data);
+  }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#datepicker) {
+      this.#datepicker.destroy();
+      this.#datepicker = null;
+    }
   }
 
   reset = (event) => {
@@ -180,6 +190,17 @@ export default class EditPointView extends SmartView{
     this._callback.formSubmit = callback;
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
+  }
+
+  #setDatepicker = () => {
+    this.#datepicker = flatpickr(
+      this.element.querySelector('.card__date'),
+      {
+        dateFormat: 'j F',
+        defaultDate: this._data.date,
+        onChange: this.#dateChangeHandler, // На событие flatpickr передаём наш колбэк
+      },
+    );
   }
 
   #typeToggleHandler = (evt) => {
@@ -202,6 +223,12 @@ export default class EditPointView extends SmartView{
       .addEventListener('change', this.#typeToggleHandler);
     this.element.querySelector('.event__field-group')
       .addEventListener('change', this.#cityToggleHandler);
+  }
+
+  #dateChangeHandler = ([userDate]) => {
+    this.updateData({
+      date: userDate,
+    });
   }
 
   #formSubmitHandler = (evt) => {
