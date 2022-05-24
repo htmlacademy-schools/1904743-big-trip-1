@@ -2,6 +2,15 @@ import dayjs from 'dayjs';
 import {getRandomInteger} from '../utils/common';
 import {nanoid} from 'nanoid';
 
+const listCities = ['Tokio', 'Moscow', 'Denver', 'Rio', 'Paris', 'Kiev', 'Sydney', 'Lisbon', 'Berlin', 'Madrid', 'Barcelona'];
+
+const generatePictures = () => {
+  const pictures = [];
+  for (let i = 0; i < getRandomInteger(1,5); i++){
+    pictures.push(`http://picsum.photos/248/152?r=${  Math.random()}`);
+  }
+  return pictures;
+};
 const generateDescription = () =>{
   const descriptions = [
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -25,191 +34,214 @@ const generateDescription = () =>{
   }
   return description;
 };
-const generateCity = () => {
-  const city = [
-    'Tokio', 'Moscow', 'Denver', 'Rio', 'Paris', 'Kiev', 'Sydney', 'Lisbon', 'Berlin', 'Madrid', 'Barcelona'
-  ];
-  const randomIndex = getRandomInteger(0, city.length - 1);
-
-  return city[randomIndex];
-};
+const generateDestination = () => [
+  {
+    name: 'Tokio',
+    description: generateDescription(),
+    pictures: generatePictures()
+  },{
+    name: 'Moscow',
+    description: generateDescription(),
+    pictures: generatePictures()
+  },{
+    name: 'Denver',
+    description: generateDescription(),
+    pictures: generatePictures()
+  },{
+    name: 'Rio',
+    description: generateDescription(),
+    pictures: generatePictures()
+  },{
+    name: 'Paris',
+    description: generateDescription(),
+    pictures: generatePictures()
+  },{
+    name: 'Kiev',
+    description: generateDescription(),
+    pictures: generatePictures()
+  },{
+    name: 'Sydney',
+    description: generateDescription(),
+    pictures: generatePictures()
+  },{
+    name: 'Lisbon',
+    description: generateDescription(),
+    pictures: generatePictures()
+  },{
+    name: 'Berlin',
+    description: generateDescription(),
+    pictures: generatePictures()
+  },{
+    name: 'Madrid',
+    description: generateDescription(),
+    pictures: generatePictures()
+  },{
+    name: 'Barcelona',
+    description: generateDescription(),
+    pictures: generatePictures()
+  }
+];
+const generateCity = (list) => list[getRandomInteger(1, list.length - 1)];
 const generatePointType = () => {
   const type = [
-    'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'
+    'taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'
   ];
   const randomIndex = getRandomInteger(0, type.length - 1);
 
   return type[randomIndex];
 };
-const generateOffers = (pointType) => {
-  const offer = [
-    {
-      type: 'Taxi',
-      offers:[
-        {
-          id: 1,
-          title: 'Upgrade to a business class',
-          price: 120
-        }, {
-          id: 2,
-          title: 'Choose the radio station',
-          price: 60
-        }, {
-          id: 5,
-          title: 'Order Uber',
-          price: 20
-        },
-      ]
-    }, {
-      type: 'Drive',
-      offers:[
-        {
-          id: 3,
-          title: 'Rent a car',
-          price: 200
-        },{
-          id: 9,
-          title: 'Registration of insurance',
-          price: 50
-        },{
-          id: 10,
-          title: 'Toll roads',
-          price: 80
-        }
-      ]
-    },{
-      type: 'Bus',
-      offers:[
-        {
-          id: 6,
-          title: 'Purchase ticket',
-          price: 5
-        }
-      ]
-    },{
-      type: 'Train',
-      offers:[
-        {
-          id: 20,
-          title: 'Snack',
-          price: 20
-        },{
-          id: 21,
-          title: 'With an animal',
-          price: 50
-        },{
-          id: 22,
-          title: 'With luggage',
-          price: 25
-        }
-      ]
-    },{
-      type: 'Ship',
-      offers:[
-        {
-          id: 23,
-          title: 'Photographer',
-          price: 60
-        },{
-          id: 24,
-          title: 'Snack',
-          price: 20
-        },{
-          id: 25,
-          title: 'Excursion',
-          price: 80
-        }
-      ]
-    },{
-      type: 'Flight',
-      offers:[
-        {
-          id: 1,
-          title: 'Add luggage',
-          price: 30
-        }, {
-          id: 11,
-          title: 'Switch to comfort class',
-          price: 100
-        },{
-          id: 12,
-          title: 'Add meal',
-          price: 15
-        },{
-          id: 13,
-          title: 'Choose seats',
-          price: 5
-        },{
-          id: 14,
-          title: 'Travel by train',
-          price: 40
-        }
-      ]
-    },{
-      type: 'Check-in',
-      offers:[
-        {
-          id: 14,
-          title: 'Add breakfast',
-          price: 50
-        },{
-          id: 15,
-          title: 'Suite room',
-          price: 150
-        },{
-          id: 16,
-          title: 'Mini bar',
-          price: 100
-        },{
-          id: 17,
-          title: 'TV',
-          price: 15
-        }
-      ]
-    },{
-      type: 'Sightseeing',
-      offers:[
-        {
-          id: 6,
-          title: 'Book tickets',
-          price: 40,
-        },{
-          id: 7,
-          title: 'Lunch in city',
-          price: 30,
-        }
-      ]
-    },{
-      type: 'Restaurant',
-      offers:[
-        {
-          id: 18,
-          title: 'Tips',
-          price: 15,
-        },{
-          id: 19,
-          title: 'Book a seat',
-          price: 20,
-        }
-      ]
-    }
-  ];
-  for(let i=0; i < offer.length; i++){
-    if (offer[i].type === pointType){
-      for (let j = 0; j < offer[i].offers.length; j++){
-        offer[i].offers[j].checked = Boolean(getRandomInteger(0,1));
+const generateOffers = () => [
+  {
+    type: 'taxi',
+    offers:[
+      {
+        id: 1,
+        title: 'Upgrade to a business class',
+        price: 120
+      }, {
+        id: 2,
+        title: 'Choose the radio station',
+        price: 60
+      }, {
+        id: 5,
+        title: 'Order Uber',
+        price: 20
+      },
+    ]
+  }, {
+    type: 'drive',
+    offers:[
+      {
+        id: 3,
+        title: 'Rent a car',
+        price: 200
+      },{
+        id: 9,
+        title: 'Registration of insurance',
+        price: 50
+      },{
+        id: 10,
+        title: 'Toll roads',
+        price: 80
       }
-      return offer[i].offers;
-    }
+    ]
+  },{
+    type: 'bus',
+    offers:[
+      {
+        id: 6,
+        title: 'Purchase ticket',
+        price: 5
+      }
+    ]
+  },{
+    type: 'train',
+    offers:[
+      {
+        id: 20,
+        title: 'Snack',
+        price: 20
+      },{
+        id: 21,
+        title: 'With an animal',
+        price: 50
+      },{
+        id: 22,
+        title: 'With luggage',
+        price: 25
+      }
+    ]
+  },{
+    type: 'ship',
+    offers:[
+      {
+        id: 23,
+        title: 'Photographer',
+        price: 60
+      },{
+        id: 24,
+        title: 'Snack',
+        price: 20
+      },{
+        id: 25,
+        title: 'Excursion',
+        price: 80
+      }
+    ]
+  },{
+    type: 'flight',
+    offers:[
+      {
+        id: 1,
+        title: 'Add luggage',
+        price: 30
+      }, {
+        id: 11,
+        title: 'Switch to comfort class',
+        price: 100
+      },{
+        id: 12,
+        title: 'Add meal',
+        price: 15
+      },{
+        id: 13,
+        title: 'Choose seats',
+        price: 5
+      },{
+        id: 14,
+        title: 'Travel by train',
+        price: 40
+      }
+    ]
+  },{
+    type: 'check-in',
+    offers:[
+      {
+        id: 14,
+        title: 'Add breakfast',
+        price: 50
+      },{
+        id: 15,
+        title: 'Suite room',
+        price: 150
+      },{
+        id: 16,
+        title: 'Mini bar',
+        price: 100
+      },{
+        id: 17,
+        title: 'TV',
+        price: 15
+      }
+    ]
+  },{
+    type: 'sightseeing',
+    offers:[
+      {
+        id: 6,
+        title: 'Book tickets',
+        price: 40,
+      },{
+        id: 7,
+        title: 'Lunch in city',
+        price: 30,
+      }
+    ]
+  },{
+    type: 'restaurant',
+    offers:[
+      {
+        id: 18,
+        title: 'Tips',
+        price: 15,
+      },{
+        id: 19,
+        title: 'Book a seat',
+        price: 20,
+      }
+    ]
   }
-};
-const generatePictures = () => {
-  const pictures = [];
-  for (let i = 0; i < getRandomInteger(1,5); i++){
-    pictures.push(`http://picsum.photos/248/152?r=${  Math.random()}`);
-  }
-  return pictures;
-};
+];
 const generateDate = () => {
   const maxDayGap = 7;
   const daysGap = getRandomInteger(0, maxDayGap);
@@ -245,10 +277,10 @@ export const generateWayPoint = () =>{
     id: nanoid(),
     dates,
     pointType,
-    city: generateCity(),
-    offers: generateOffers(pointType),
-    description: generateDescription(),
-    pictures: generatePictures(),
+    city: generateCity(listCities),
+    listCities,
+    destination: generateDestination(),
+    offers: generateOffers(),
     price: generatePrice(),
     timeBegin,
     timeEnd,
