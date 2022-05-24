@@ -2,6 +2,9 @@ import dayjs from 'dayjs';
 import SmartView from './smart-view';
 import {TYPE} from '../const';
 import {offersFilter, destinationFilter} from '../utils/wayPoint';
+import flatpickr from 'flatpickr';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const BLANK_WAYPOINT = {
   city: '',
