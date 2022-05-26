@@ -8,6 +8,7 @@ import TripPresenter from './presenter/trip-presenter';
 const WAYPOINT_COUNT = 10;
 
 const wayPoints = Array.from({length: WAYPOINT_COUNT}, generateWayPoint);
+console.log(wayPoints)
 
 const siteHeaderElement = document.querySelector('.page-body');
 const siteMainElement = document.querySelector('.page-main');

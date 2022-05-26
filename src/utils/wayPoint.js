@@ -1,8 +1,10 @@
+import dayjs from 'dayjs';
+
 export const sortEventTime = (eventA, eventB) => eventB.duration - eventA.duration;
 
 export const sortEventPrice = (eventA, eventB) => eventB.price - eventA.price;
 
-export const sortEvents = (eventA, eventB) => eventA.dates - eventB.dates;
+export const sortEvents = (eventA, eventB) => eventA.dateStart - eventB.dateStart;
 
 export const offersFilter = (offer, pointType) => {
   for(let i=0; i < offer.length; i++){
@@ -22,4 +24,6 @@ export const destinationFilter = (city, destination) => {
     }
   }
 };
+
+export const generateDuration = (timeBegin, timeEnd) => dayjs(timeEnd - timeBegin).subtract(5,'hour');
 

@@ -45,16 +45,14 @@ const createEditPointTemplate = (data) => {
     pointType,
     price,
     offers,
-    timeBegin,
-    timeEnd,
-    dates,
+    dateEnd,
+    dateStart,
     destination,
   } = data;
 
   const currentOffers = offersFilter(offers, pointType);
-  const date = dayjs(dates).format('DD/MM/YY');
-  const timeStart = dayjs(timeBegin).format('hh:mm');
-  const timeFinish = dayjs(timeEnd).format('hh:mm');
+  const timeStart = dayjs(dateStart).format('DD/MM/YY hh:mm');
+  const timeFinish = dayjs(dateEnd).format('DD/MM/YY hh:mm');
   const currentDestination = destinationFilter(city, destination);
 
   const createOffersElement = (offer) =>`<div class="event__available-offers">
@@ -116,10 +114,10 @@ const createEditPointTemplate = (data) => {
 
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${date} ${timeStart}">
+                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${timeStart}">
                     &mdash;
                     <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${date} ${timeFinish}">
+                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${timeFinish}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">
@@ -160,6 +158,8 @@ export default class EditPointView extends SmartView{
     this._data = EditPointView.parseEventToData(wayPoint);
 
     this.#setInnerHandlers();
+    this.#setStartDatepicker();
+    this.#setEndDatepicker();
   }
 
   get template(){
@@ -183,6 +183,8 @@ export default class EditPointView extends SmartView{
 
   restoreHandlers = () => {
     this.#setInnerHandlers();
+    this.#setStartDatepicker();
+    this.#setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
@@ -192,13 +194,26 @@ export default class EditPointView extends SmartView{
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
-  #setDatepicker = () => {
+  #setStartDatepicker = () => {
     this.#datepicker = flatpickr(
-      this.element.querySelector('.card__date'),
+      this.element.querySelector('#event-start-time-1'),
       {
-        dateFormat: 'j F',
+        enableTime: true,
+        dateFormat: 'd/m/y H:i',
         defaultDate: this._data.date,
-        onChange: this.#dateChangeHandler, // На событие flatpickr передаём наш колбэк
+        onChange: this.#dateStartChangeHandler,
+      },
+    );
+  }
+
+  #setEndDatepicker = () => {
+    this.#datepicker = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._data.date,
+        onChange: this.#dateEndChangeHandler,
       },
     );
   }
@@ -217,18 +232,25 @@ export default class EditPointView extends SmartView{
     });
   }
 
+  #dateEndChangeHandler = ([userDate]) => {
+    this.updateData({
+      dateEnd: userDate,
+    });
+  }
+
+  #dateStartChangeHandler = ([userDate]) => {
+    this.updateData({
+      dateStart: userDate,
+    });
+  }
+
 
   #setInnerHandlers = () => {
     this.element.querySelector('.event__type-list')
       .addEventListener('change', this.#typeToggleHandler);
     this.element.querySelector('.event__field-group')
       .addEventListener('change', this.#cityToggleHandler);
-  }
 
-  #dateChangeHandler = ([userDate]) => {
-    this.updateData({
-      date: userDate,
-    });
   }
 
   #formSubmitHandler = (evt) => {
