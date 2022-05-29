@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import {getRandomInteger} from '../utils/common';
 import {nanoid} from 'nanoid';
+import {generateDuration} from '../utils/wayPoint';
 
 const listCities = ['Tokio', 'Moscow', 'Denver', 'Rio', 'Paris', 'Kiev', 'Sydney', 'Lisbon', 'Berlin', 'Madrid', 'Barcelona'];
 
@@ -242,11 +243,25 @@ const generateOffers = () => [
     ]
   }
 ];
-const generateDate = () => {
+
+const generateTimeBegin = () => {
+  const maxMinutesGap = 180;
+  const MinutesGap = getRandomInteger(0, maxMinutesGap);
+  return dayjs().add(MinutesGap, 'minute');
+};
+
+const generateStartDate = () => {
   const maxDayGap = 7;
   const daysGap = getRandomInteger(0, maxDayGap);
-  return dayjs().add(daysGap, 'day').toDate();
+  return generateTimeBegin().add(daysGap, 'day', );
 };
+
+const generateEndDate = (start) => {
+  const maxMinutesGap = 360;
+  const MinutesGap = getRandomInteger(200, maxMinutesGap);
+  return start.add(MinutesGap, 'minute');
+};
+
 const generatePrice = () => {
   let price = getRandomInteger(20, 600);
   while (price % 10 !== 0){
@@ -254,37 +269,24 @@ const generatePrice = () => {
   }
   return price;
 };
-const generateTimeBegin = () => {
-  const maxMinutesGap = 180;
-  const MinutesGap = getRandomInteger(0, maxMinutesGap);
-  return dayjs().add(MinutesGap, 'minute');
-};
-const generateTimeEnd = () => {
-  const maxMinutesGap = 360;
-  const MinutesGap = getRandomInteger(200, maxMinutesGap);
-  return dayjs().add(MinutesGap, 'minute');
-};
-const generateDuration = (timeBegin, timeEnd) => dayjs(timeEnd - timeBegin).subtract(5,'hour');
-
 
 export const generateWayPoint = () =>{
-  const dates = generateDate();
+  const dateStart = generateStartDate();
+  const dateEnd = generateEndDate(dateStart);
+  const duration = generateDuration(dateStart, dateEnd);
   const pointType = generatePointType();
-  const timeBegin = generateTimeBegin();
-  const timeEnd = generateTimeEnd();
 
   return {
     id: nanoid(),
-    dates,
+    dateStart,
+    dateEnd,
+    duration,
     pointType,
     city: generateCity(listCities),
     listCities,
     destination: generateDestination(),
     offers: generateOffers(),
     price: generatePrice(),
-    timeBegin,
-    timeEnd,
-    duration: generateDuration(timeBegin, timeEnd),
     isFavorite: Boolean(getRandomInteger(0,1))
   };
 };
