@@ -3,7 +3,7 @@ import NoEventsView from '../view/no-events-view';
 import EventsListView from '../view/events-list-view';
 import { render, RenderPosition } from '../utils/render';
 import { sortEventTime, sortEventPrice, sortEvents } from '../utils/wayPoint.js';
-import { SortType } from '../const.js';
+import { SortType, UserAction, UpdateType } from '../const.js';
 import PointPresenter from './point-presenter';
 
 export default class TripPresenter {
@@ -48,18 +48,33 @@ export default class TripPresenter {
 
   #handleViewAction = (actionType, updateType, update) => {
     console.log(actionType, updateType, update);
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
+    switch (actionType) {
+      case UserAction.UPDATE_EVENT:
+        this.#eventsModel.updateEvent(updateType, update);
+        break;
+      case UserAction.ADD_EVENT:
+        this.#eventsModel.addEvent(updateType, update);
+        break;
+      case UserAction.DELETE_EVENT:
+        this.#eventsModel.deleteEvent(updateType, update);
+        break;
+    }
   }
 
   #handleModelEvent = (updateType, data) => {
     console.log(updateType, data);
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда задача ушла в архив)
-    // - обновить всю доску (например, при переключении фильтра)
+    switch (updateType) {
+      case UpdateType.PATCH:
+        // - обновить часть списка (например, когда поменялось описание)
+        this.#pointPresenter.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        // - обновить список (например, когда задача ушла в архив)
+        break;
+      case UpdateType.MAJOR:
+        // - обновить всю доску (например, при переключении фильтра)
+        break;
+    }
   }
 
   #handleSortTypeChange = (sortType) => {
