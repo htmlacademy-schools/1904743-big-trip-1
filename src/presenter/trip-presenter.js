@@ -2,7 +2,6 @@ import SortView from '../view/sort-view';
 import NoEventsView from '../view/no-events-view';
 import EventsListView from '../view/events-list-view';
 import { render, RenderPosition } from '../utils/render';
-import { updateItem } from '../utils/common';
 import { sortEventTime, sortEventPrice, sortEvents } from '../utils/wayPoint.js';
 import { SortType } from '../const.js';
 import PointPresenter from './point-presenter';
@@ -15,10 +14,8 @@ export default class TripPresenter {
   #eventsListComponent = new EventsListView();
   #noEventsComponent = new NoEventsView();
 
-  #tripEvents = [];
   #pointPresenter = new Map();
   #currentSortType = SortType.Day;
-  #sourcedTripEvents = [];
 
   constructor(tripContainer, eventsModel) {
     this.#tripContainer = tripContainer;
@@ -26,15 +23,19 @@ export default class TripPresenter {
   }
 
   get events() {
+    switch (this.#currentSortType) {
+      case SortType.Price:
+        return [...this.#eventsModel.events].sort(sortEventPrice);
+      case SortType.Time:
+        return [...this.#eventsModel.events].sort(sortEventTime);
+      case SortType.Day:
+        return [...this.#eventsModel.events].sort(sortEvents);
+    }
     return this.#eventsModel.events;
   }
 
-  init = (tripEvents) => {
-    this.#tripEvents = [...tripEvents].sort(sortEvents);
-    this.#sourcedTripEvents = [...this.#tripEvents];
-
+  init = () => {
     render(this.#tripContainer, this.#eventsListComponent, RenderPosition.BEFOREEND);
-
     this.#renderTrip();
   }
 
@@ -44,27 +45,7 @@ export default class TripPresenter {
 
 
   #handleEventsChange = (updatedEvent) => {
-    this.#tripEvents = updateItem(this.#tripEvents, updatedEvent);
-    this.#sourcedTripEvents = updateItem(this.#sourcedTripEvents, updatedEvent);
     this.#pointPresenter.get(updatedEvent.id).init(updatedEvent);
-  }
-
-  #sortEvents = (sortType) => {
-    switch (sortType) {
-      case SortType.Price:
-        this.#tripEvents.sort(sortEventPrice);
-        break;
-      case SortType.Time:
-        this.#tripEvents.sort(sortEventTime);
-        break;
-      case SortType.Day:
-        this.#tripEvents = [...this.#sourcedTripEvents];
-        break;
-      default:
-        this.#tripEvents = [...this.#sourcedTripEvents];
-    }
-
-    this.#currentSortType = sortType;
   }
 
   #handleSortTypeChange = (sortType) => {
@@ -72,7 +53,7 @@ export default class TripPresenter {
       return;
     }
 
-    this.#sortEvents(sortType);
+    this.#currentSortType = sortType;
     this.#clearEventsList();
     this.#renderEventsList();
   }
@@ -89,10 +70,8 @@ export default class TripPresenter {
     this.#pointPresenter.set(event.id, pointPresenter);
   }
 
-  #renderEvents = (from, to) => {
-    this.#tripEvents
-      .slice(from, to)
-      .forEach((tripEvent) => this.#renderEvent(tripEvent));
+  #renderEvents = (events) => {
+    events.forEach((event) => this.#renderEvent(event));
   }
 
   #renderNoEvents = () => {
@@ -106,11 +85,13 @@ export default class TripPresenter {
 
   #renderEventsList = () => {
     this.#renderSort();
-    this.#renderEvents(0, this.#tripEvents.length);
+    const eventsCount = this.events.length;
+    const events = this.events.slice(0, eventsCount);
+    this.#renderEvents(events);
   }
 
   #renderTrip = () => {
-    if (this.#tripEvents.length === 0) { this.#renderNoEvents(); }
+    if (this.events.length === 0) { this.#renderNoEvents(); }
     else { this.#renderEventsList(); }
   }
 }

@@ -26,4 +26,4 @@ render(siteMenuElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 render(siteFilterElement, new FilterView(), RenderPosition.BEFOREEND);
 render(siteInfoElement, new InfoView(), RenderPosition.AFTERBEGIN);
 
-tripPresenter.init(wayPoints);
+tripPresenter.init();
