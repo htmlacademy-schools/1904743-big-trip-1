@@ -2,6 +2,7 @@ import EditPointView from '../view/edit-point-view';
 import WayPointView from '../view/way-point-view';
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
 import {UpdateType, UserAction} from '../const';
+import {isDatesEqual} from '../utils/wayPoint';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -38,6 +39,7 @@ export default class PointPresenter {
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#eventEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
+    this.#eventEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this.#eventListContainer, this.#eventComponent, RenderPosition.BEFOREEND);
@@ -101,12 +103,26 @@ export default class PointPresenter {
     );
   }
 
-  #handleFormSubmit = (event) => {
+  #handleFormSubmit = (update) => {
+
+    const isMinorUpdate = !(isDatesEqual(this.#event.dateStart, update.dateStart)
+        && isDatesEqual(this.#event.dateEnd, update.dateEnd)) ||
+      !(this.#event.price === update.price);
+
+
     this.#changeData(
       UserAction.UPDATE_EVENT,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update,
+    );
+    this.#replaceFormToCard();
+  }
+
+  #handleDeleteClick = (event) => {
+    this.#changeData(
+      UserAction.DELETE_EVENT,
       UpdateType.MINOR,
       event,
     );
-    this.#replaceFormToCard();
   }
 }

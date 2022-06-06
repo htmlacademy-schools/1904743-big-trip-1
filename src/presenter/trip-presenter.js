@@ -109,18 +109,6 @@ export default class TripPresenter {
     render(this.#tripContainer, this.#noEventsComponent, RenderPosition.BEFOREEND);
   }
 
-  #clearEventsList = () => {
-    this.#pointPresenter.forEach((presenter) => presenter.destroy());
-    this.#pointPresenter.clear();
-  }
-
-  #renderEventsList = () => {
-    this.#renderSort();
-    const eventsCount = this.events.length;
-    const events = this.events.slice(0, eventsCount);
-    this.#renderEvents(events);
-  }
-
   #clearTrip = ({resetSortType = false} = {}) => {
 
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
@@ -143,6 +131,7 @@ export default class TripPresenter {
       return;
     }
 
-    this.#renderEventsList();
+    this.#renderSort();
+    this.#renderEvents(events.slice(0, countEvents));
   }
 }
