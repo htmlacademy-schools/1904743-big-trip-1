@@ -1,7 +1,7 @@
 import SortView from '../view/sort-view';
 import NoEventsView from '../view/no-events-view';
 import EventsListView from '../view/events-list-view';
-import { render, RenderPosition } from '../utils/render';
+import {remove, render, RenderPosition} from '../utils/render';
 import { sortEventTime, sortEventPrice, sortEvents } from '../utils/wayPoint.js';
 import { SortType, UserAction, UpdateType } from '../const.js';
 import PointPresenter from './point-presenter';
@@ -10,9 +10,10 @@ export default class TripPresenter {
   #tripContainer = null;
   #eventsModel = null;
 
-  #sortComponent = new SortView();
+  //#sortComponent = new SortView();
   #eventsListComponent = new EventsListView();
   #noEventsComponent = new NoEventsView();
+  #sortComponent = null;
 
   #pointPresenter = new Map();
   #currentSortType = SortType.Day;
@@ -47,7 +48,6 @@ export default class TripPresenter {
 
 
   #handleViewAction = (actionType, updateType, update) => {
-    console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
         this.#eventsModel.updateEvent(updateType, update);
@@ -62,17 +62,17 @@ export default class TripPresenter {
   }
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this.#pointPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
-        // - обновить список (например, когда задача ушла в архив)
+        this.#clearTrip();
+        this.#renderTrip();
         break;
       case UpdateType.MAJOR:
-        // - обновить всю доску (например, при переключении фильтра)
+        this.#clearTrip({resetSortType: true});
+        this.#renderTrip();
         break;
     }
   }
@@ -83,14 +83,16 @@ export default class TripPresenter {
     }
 
     this.#currentSortType = sortType;
-    this.#clearEventsList();
-    this.#renderEventsList();
+    this.#clearTrip();
+    this.#renderTrip();
   }
 
 
   #renderSort = () => {
-    render(this.#tripContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
+    this.#sortComponent = new SortView(this.#currentSortType);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+
+    render(this.#tripContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   #renderEvent = (event) => {
@@ -119,8 +121,28 @@ export default class TripPresenter {
     this.#renderEvents(events);
   }
 
+  #clearTrip = ({resetSortType = false} = {}) => {
+
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#noEventsComponent);
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.Day;
+    }
+  }
+
   #renderTrip = () => {
-    if (this.events.length === 0) { this.#renderNoEvents(); }
-    else { this.#renderEventsList(); }
+    const events = this.events;
+    const countEvents = events.length;
+
+    if (countEvents === 0) {
+      this.#renderNoEvents();
+      return;
+    }
+
+    this.#renderEventsList();
   }
 }
