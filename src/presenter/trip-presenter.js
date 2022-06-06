@@ -9,6 +9,7 @@ import PointPresenter from './point-presenter';
 
 export default class TripPresenter {
   #tripContainer = null;
+  #eventsModel = null;
 
   #sortComponent = new SortView();
   #eventsListComponent = new EventsListView();
@@ -19,8 +20,13 @@ export default class TripPresenter {
   #currentSortType = SortType.Day;
   #sourcedTripEvents = [];
 
-  constructor(tripContainer) {
+  constructor(tripContainer, eventsModel) {
     this.#tripContainer = tripContainer;
+    this.#eventsModel = eventsModel;
+  }
+
+  get events() {
+    return this.#eventsModel.events;
   }
 
   init = (tripEvents) => {
