@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-export const sortEventTime = (eventA, eventB) => eventB.duration - eventA.duration;
+export const sortEventTime = (eventA, eventB) => dayjs(eventA.dateStart - eventA.dateEnd) - dayjs(eventB.dateStart - eventB.dateEnd);
 
 export const sortEventPrice = (eventA, eventB) => eventB.price - eventA.price;
 

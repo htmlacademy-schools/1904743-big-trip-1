@@ -287,6 +287,6 @@ export const generateWayPoint = () =>{
     destination: generateDestination(),
     offers: generateOffers(),
     price: generatePrice(),
-    isFavorite: Boolean(getRandomInteger(0,1))
+    isFavorite: false
   };
 };

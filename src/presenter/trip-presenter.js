@@ -10,7 +10,6 @@ export default class TripPresenter {
   #tripContainer = null;
   #eventsModel = null;
 
-  //#sortComponent = new SortView();
   #eventsListComponent = new EventsListView();
   #noEventsComponent = new NoEventsView();
   #sortComponent = null;
