@@ -20,6 +20,8 @@ export default class TripPresenter {
   constructor(tripContainer, eventsModel) {
     this.#tripContainer = tripContainer;
     this.#eventsModel = eventsModel;
+
+    this.#eventsModel.addObserver(this.#handleModelEvent);
   }
 
   get events() {
@@ -44,8 +46,20 @@ export default class TripPresenter {
   }
 
 
-  #handleEventsChange = (updatedEvent) => {
-    this.#pointPresenter.get(updatedEvent.id).init(updatedEvent);
+  #handleViewAction = (actionType, updateType, update) => {
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+  }
+
+  #handleModelEvent = (updateType, data) => {
+    console.log(updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда задача ушла в архив)
+    // - обновить всю доску (например, при переключении фильтра)
   }
 
   #handleSortTypeChange = (sortType) => {
@@ -65,7 +79,7 @@ export default class TripPresenter {
   }
 
   #renderEvent = (event) => {
-    const pointPresenter = new PointPresenter(this.#eventsListComponent, this.#handleEventsChange, this.#handleModeChange);
+    const pointPresenter = new PointPresenter(this.#eventsListComponent, this.#handleViewAction, this.#handleModeChange);
     pointPresenter.init(event);
     this.#pointPresenter.set(event.id, pointPresenter);
   }

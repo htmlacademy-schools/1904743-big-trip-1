@@ -1,6 +1,7 @@
 import EditPointView from '../view/edit-point-view';
 import WayPointView from '../view/way-point-view';
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
+import {UpdateType, UserAction} from '../const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -93,11 +94,19 @@ export default class PointPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#changeData({ ...this.#event, isFavorite: !this.#event.isFavorite });
+    this.#changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      {...this.#event, isFavorite: !this.#event.isFavorite},
+    );
   }
 
   #handleFormSubmit = (event) => {
-    this.#changeData(event);
+    this.#changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      event,
+    );
     this.#replaceFormToCard();
   }
 }
