@@ -55,9 +55,9 @@ const createEditPointTemplate = (data) => {
   const timeFinish = dayjs(dateEnd).format('DD/MM/YY hh:mm');
   const currentDestination = destinationFilter(city, destination);
 
-  const createOffersElement = (offer) =>`<div class="event__available-offers">
+  const createOffersElement = (offer) =>`
             <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer-luggage" checked>
+              <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer-luggage">
               <label class="event__offer-label" for="${offer.id}">
                 <span class="event__offer-title">${offer.title}</span>
                 &plus;&euro;&nbsp;
@@ -69,6 +69,7 @@ const createEditPointTemplate = (data) => {
 
   const offersElements = currentOffers.map(createOffersElement).join('');
   const citiesElements = listCities.map(createCitiesElement).join('');
+  const listOffersElements = `<div class="event__available-offers">${offersElements}</div>`;
 
   const createPictureElement = (picture) =>(`<img class="event__photo" src=${picture} alt="Event photo">`);
   const picturesElements = currentDestination.pictures.map(createPictureElement).join('');
@@ -137,7 +138,7 @@ const createEditPointTemplate = (data) => {
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-                    ${offersElements}
+                    ${listOffersElements}
                   </section>
 
                   <section class="event__section  event__section--destination">
