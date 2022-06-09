@@ -15,7 +15,7 @@ const createFilterItemTemplate = (filter, currentFilterType) => {
         ${type === currentFilterType ? 'checked' : ''}>
      <label
         class="trip-filters__filter-label"
-        for="filter-${type}}">${name}</label>
+        for="filter-${type}">${name}</label>
      </div>`
   );
 };

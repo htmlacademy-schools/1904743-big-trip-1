@@ -251,7 +251,7 @@ const generateTimeBegin = () => {
 };
 
 const generateStartDate = () => {
-  const maxDayGap = 7;
+  const maxDayGap = getRandomInteger(-7, 7);
   const daysGap = getRandomInteger(0, maxDayGap);
   return generateTimeBegin().add(daysGap, 'day', );
 };

@@ -1,6 +1,5 @@
 import SiteMenuView from './view/site-menu-view.js';
 import InfoView from './view/info-view.js';
-import FilterView from './view/filter-view.js';
 import {generateWayPoint} from './mock/wayPoint';
 import { render, RenderPosition } from './utils/render';
 import TripPresenter from './presenter/trip-presenter';
