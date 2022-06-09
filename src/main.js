@@ -4,19 +4,13 @@ import FilterView from './view/filter-view.js';
 import {generateWayPoint} from './mock/wayPoint';
 import { render, RenderPosition } from './utils/render';
 import TripPresenter from './presenter/trip-presenter';
+import FilterPresenter from './presenter/filter-presenter';
 import EventsModel from './model/points-model';
 import FilterModel from './model/filter-model';
 
 const WAYPOINT_COUNT = 10;
 
 const wayPoints = Array.from({length: WAYPOINT_COUNT}, generateWayPoint);
-
-const filters = [
-  {
-    type: 'everything',
-    name: 'EVERYTHING',
-  },
-];
 
 const eventsModel = new EventsModel();
 eventsModel.events = wayPoints;
@@ -30,10 +24,11 @@ const siteFilterElement = siteHeaderElement.querySelector('.trip-controls__filte
 const siteSortAndEventsElement = siteMainElement.querySelector('.trip-events');
 const siteInfoElement = siteHeaderElement.querySelector('.trip-main');
 
-const tripPresenter = new TripPresenter(siteSortAndEventsElement, eventsModel);
-
 render(siteMenuElement, new SiteMenuView(), RenderPosition.BEFOREEND);
-render(siteFilterElement, new FilterView(filters, 'everything'), RenderPosition.BEFOREEND);
 render(siteInfoElement, new InfoView(), RenderPosition.AFTERBEGIN);
 
+const tripPresenter = new TripPresenter(siteSortAndEventsElement, eventsModel);
+const filterPresenter = new FilterPresenter(siteFilterElement, filterModel, eventsModel);
+
+filterPresenter.init();
 tripPresenter.init();
