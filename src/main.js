@@ -23,6 +23,7 @@ const siteFilterElement = siteHeaderElement.querySelector('.trip-controls__filte
 const siteSortAndEventsElement = siteMainElement.querySelector('.trip-events');
 const siteInfoElement = siteHeaderElement.querySelector('.trip-main');
 
+
 render(siteMenuElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 render(siteInfoElement, new InfoView(), RenderPosition.AFTERBEGIN);
 
@@ -31,3 +32,8 @@ const filterPresenter = new FilterPresenter(siteFilterElement, filterModel, even
 
 filterPresenter.init();
 tripPresenter.init();
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  tripPresenter.createEvent();
+});

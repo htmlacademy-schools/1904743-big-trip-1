@@ -6,6 +6,7 @@ import { sortEventTime, sortEventPrice, sortEvents } from '../utils/wayPoint.js'
 import {filter} from '../utils/filter.js';
 import { SortType, UserAction, UpdateType, FilterType } from '../const.js';
 import PointPresenter from './point-presenter';
+import EventNewPresenter from './event-new-presenter';
 
 export default class TripPresenter {
   #tripContainer = null;
@@ -17,6 +18,7 @@ export default class TripPresenter {
   #sortComponent = null;
 
   #pointPresenter = new Map();
+  #eventNewPresenter = null;
   #currentSortType = SortType.Day;
   #filterType = FilterType.EVERYTHING;
 
@@ -24,6 +26,8 @@ export default class TripPresenter {
     this.#tripContainer = tripContainer;
     this.#eventsModel = eventsModel;
     this.#filterModel = filterModel;
+
+    this.#eventNewPresenter= new EventNewPresenter(this.#eventsListComponent, this.#handleViewAction);
 
     this.#eventsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -51,7 +55,14 @@ export default class TripPresenter {
     this.#renderTrip();
   }
 
+  createEvent = () => {
+    this.#currentSortType = SortType.Day;
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this.#eventNewPresenter.init();
+  }
+
   #handleModeChange = () => {
+    this.#eventNewPresenter.destroy();
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
   }
 
@@ -121,6 +132,7 @@ export default class TripPresenter {
 
   #clearTrip = ({resetSortType = false} = {}) => {
 
+    this.#eventNewPresenter.destroy();
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
 

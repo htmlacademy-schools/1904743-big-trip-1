@@ -247,7 +247,7 @@ const generateOffers = () => [
 const generateTimeBegin = () => {
   const maxMinutesGap = 180;
   const MinutesGap = getRandomInteger(0, maxMinutesGap);
-  return dayjs().add(MinutesGap, 'minute');
+  return dayjs().add(MinutesGap, 'minutes');
 };
 
 const generateStartDate = () => {
@@ -259,7 +259,7 @@ const generateStartDate = () => {
 const generateEndDate = (start) => {
   const maxMinutesGap = 360;
   const MinutesGap = getRandomInteger(200, maxMinutesGap);
-  return start.add(MinutesGap, 'minute');
+  return start.add(MinutesGap, 'minutes');
 };
 
 const generatePrice = () => {
