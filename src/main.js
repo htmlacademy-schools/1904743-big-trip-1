@@ -27,7 +27,7 @@ const siteInfoElement = siteHeaderElement.querySelector('.trip-main');
 render(siteMenuElement, new SiteMenuView(), RenderPosition.BEFOREEND);
 render(siteInfoElement, new InfoView(), RenderPosition.AFTERBEGIN);
 
-const tripPresenter = new TripPresenter(siteSortAndEventsElement, eventsModel);
+const tripPresenter = new TripPresenter(siteSortAndEventsElement, eventsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteFilterElement, filterModel, eventsModel);
 
 filterPresenter.init();

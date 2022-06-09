@@ -3,12 +3,14 @@ import NoEventsView from '../view/no-events-view';
 import EventsListView from '../view/events-list-view';
 import {remove, render, RenderPosition} from '../utils/render';
 import { sortEventTime, sortEventPrice, sortEvents } from '../utils/wayPoint.js';
+import {filter} from '../utils/filter.js';
 import { SortType, UserAction, UpdateType } from '../const.js';
 import PointPresenter from './point-presenter';
 
 export default class TripPresenter {
   #tripContainer = null;
   #eventsModel = null;
+  #filterModel = null;
 
   #eventsListComponent = new EventsListView();
   #noEventsComponent = new NoEventsView();
@@ -17,23 +19,30 @@ export default class TripPresenter {
   #pointPresenter = new Map();
   #currentSortType = SortType.Day;
 
-  constructor(tripContainer, eventsModel) {
+  constructor(tripContainer, eventsModel, filterModel) {
     this.#tripContainer = tripContainer;
     this.#eventsModel = eventsModel;
+    this.#filterModel = filterModel;
 
     this.#eventsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get events() {
+    const filterType = this.#filterModel.filter;
+    const events = this.#eventsModel.events;
+    const filteredEvents = filter[filterType](events);
+
+
     switch (this.#currentSortType) {
       case SortType.Price:
-        return [...this.#eventsModel.events].sort(sortEventPrice);
+        return filteredEvents.sort(sortEventPrice);
       case SortType.Time:
-        return [...this.#eventsModel.events].sort(sortEventTime);
+        return filteredEvents.sort(sortEventTime);
       case SortType.Day:
-        return [...this.#eventsModel.events].sort(sortEvents);
+        return filteredEvents.sort(sortEvents);
     }
-    return this.#eventsModel.events;
+    return filteredEvents;
   }
 
   init = () => {
