@@ -11,6 +11,13 @@ const WAYPOINT_COUNT = 10;
 
 const wayPoints = Array.from({length: WAYPOINT_COUNT}, generateWayPoint);
 
+const filters = [
+  {
+    type: 'everything',
+    name: 'EVERYTHING',
+  },
+];
+
 const eventsModel = new EventsModel();
 eventsModel.events = wayPoints;
 
@@ -26,7 +33,7 @@ const siteInfoElement = siteHeaderElement.querySelector('.trip-main');
 const tripPresenter = new TripPresenter(siteSortAndEventsElement, eventsModel);
 
 render(siteMenuElement, new SiteMenuView(), RenderPosition.BEFOREEND);
-render(siteFilterElement, new FilterView(), RenderPosition.BEFOREEND);
+render(siteFilterElement, new FilterView(filters, 'everything'), RenderPosition.BEFOREEND);
 render(siteInfoElement, new InfoView(), RenderPosition.AFTERBEGIN);
 
 tripPresenter.init();
