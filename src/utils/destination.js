@@ -1,11 +1,11 @@
-import {getRandomInteger} from './common';
-const generatePictures = () => {
+//import {getRandomInteger} from './common';
+/*const generatePictures = () => {
   const pictures = [];
   for (let i = 0; i < getRandomInteger(1,5); i++){
     pictures.push(`https://picsum.photos/248/152?r=${Math.random()}`);
   }
   return pictures;
-};
+};*/
 
 export const generateDestination = () => [
   {

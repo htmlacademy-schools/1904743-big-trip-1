@@ -5,15 +5,14 @@ import {offersFilter, destinationFilter} from '../utils/wayPoint';
 import flatpickr from 'flatpickr';
 import {listCities} from '../const';
 import he from 'he';
-import {generateOffers} from '../utils/offers';
-
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import {generateOffers} from '../utils/offers';
 
 const BLANK_WAYPOINT = {
   city: [],
   pointType: '',
   price: '',
-  offers: [],
+  offers: generateOffers(),
   dateEnd: null,
   dateStart: null,
   destination: [],

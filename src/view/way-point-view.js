@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import AbstractView from './abstract-view';
 import {offersFilter, generateDuration} from '../utils/wayPoint';
-import he from 'he';
+//import he from 'he';
 
 const createWayPointTemplate = (wayPoint) => {
   const {city, pointType, dateStart, dateEnd, isFavorite, offers, price} = wayPoint;
