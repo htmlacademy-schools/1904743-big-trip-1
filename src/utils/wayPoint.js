@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-export const sortEventTime = (eventA, eventB) => eventB.duration - eventA.duration;
+export const sortEventTime = (eventA, eventB) => dayjs(eventA.dateStart - eventA.dateEnd) - dayjs(eventB.dateStart - eventB.dateEnd);
 
 export const sortEventPrice = (eventA, eventB) => eventB.price - eventA.price;
 
@@ -27,3 +27,4 @@ export const destinationFilter = (city, destination) => {
 
 export const generateDuration = (timeBegin, timeEnd) => dayjs(timeEnd - timeBegin).subtract(5,'hour');
 
+export const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) || dayjs(dateA).isSame(dayjs(dateB));

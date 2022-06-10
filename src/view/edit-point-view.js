@@ -3,23 +3,24 @@ import SmartView from './smart-view';
 import {TYPE} from '../const';
 import {offersFilter, destinationFilter} from '../utils/wayPoint';
 import flatpickr from 'flatpickr';
-
+import {listCities} from '../const';
+import he from 'he';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import {generateOffers} from '../utils/offers';
 
 const BLANK_WAYPOINT = {
-  city: '',
-  pointType: TYPE[0],
+  city: [],
+  pointType: '',
   price: '',
-  description: '',
-  offers: [],
-  pictures: [],
-  timeBegin: '',
-  timeEnd: '',
-  dates: '',
+  offers: generateOffers(),
+  dateEnd: null,
+  dateStart: null,
   destination: [],
 };
 
-const createEventEditTypeTemplate = (currentType) => (
+const createCitiesElement = (listCity) =>`<option value="${listCity}"></option>`;
+
+const createEventEditTypeTemplate = (pointType) => (
   TYPE.map((type) => `
     <div class="event__type-item">
     <input
@@ -28,7 +29,7 @@ const createEventEditTypeTemplate = (currentType) => (
     type="radio"
     name="event-type"
     value="${type}"
-    ${currentType.toLowerCase() === type ? 'checked' : ''}
+    ${pointType.toLowerCase() === type ? 'checked' : ''}
      />
      <label
      class="event__type-label  event__type-label--${type}"
@@ -38,10 +39,21 @@ const createEventEditTypeTemplate = (currentType) => (
     .join('')
 );
 
+const createOffersElement = (offer) =>`
+            <div class="event__offer-selector">
+              <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer-luggage">
+              <label class="event__offer-label" for="${offer.id}">
+                <span class="event__offer-title">${offer.title}</span>
+                &plus;&euro;&nbsp;
+                <span class="event__offer-price">${offer.price}</span>
+              </label>
+            </div>`;
+
+const createPictureElement = (picture) =>(`<img class="event__photo" src=${picture} alt="Event photo">`);
+
 const createEditPointTemplate = (data) => {
   const{
     city,
-    listCities,
     pointType,
     price,
     offers,
@@ -50,38 +62,31 @@ const createEditPointTemplate = (data) => {
     destination,
   } = data;
 
-  const currentOffers = offersFilter(offers, pointType);
-  const timeStart = dayjs(dateStart).format('DD/MM/YY hh:mm');
-  const timeFinish = dayjs(dateEnd).format('DD/MM/YY hh:mm');
+  const timeStart = dayjs(dateStart).format('DD/MM/YY HH:mm');
+  const timeFinish = dayjs(dateEnd).format('DD/MM/YY HH:mm');
   const currentDestination = destinationFilter(city, destination);
 
-  const createOffersElement = (offer) =>`<div class="event__available-offers">
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer-luggage" checked>
-              <label class="event__offer-label" for="${offer.id}">
-                <span class="event__offer-title">${offer.title}</span>
-                &plus;&euro;&nbsp;
-                <span class="event__offer-price">${offer.price}</span>
-              </label>
-            </div>`;
-
-  const createCitiesElement = (listCity) =>`<option value="${listCity}"></option>`;
-
-  const offersElements = currentOffers.map(createOffersElement).join('');
+  //const offersElements = offersFilter(offers, pointType).map(createOffersElement).join('');
   const citiesElements = listCities.map(createCitiesElement).join('');
+  const listOffersElements = offers.length === 0
+    ? ''
+    : `<div class="event__available-offers">${offersFilter(offers, pointType).map(createOffersElement).join('')}</div>`;
 
-  const createPictureElement = (picture) =>(`<img class="event__photo" src=${picture} alt="Event photo">`);
-  const picturesElements = currentDestination.pictures.map(createPictureElement).join('');
-
-  const createListPictureElement = (picture) =>(
-    `${picture.length !== 0 ? `<div class="event__photos-container">
+  const createListPictureElement = () =>(
+    `${destination.length !== 0
+      ? `<div class="event__photos-container">
         <div class="event__photos-tape">
-            ${picturesElements}
+            ${currentDestination.pictures.map(createPictureElement).join('')}
           </div>
-        </div>` : ''}
-    `);
+        </div>`
+      : ''
+    }
+  `);
 
-  const listPicturesElements = createListPictureElement(currentDestination.pictures);
+  const listPicturesElements = destination.length === 0
+    ? ''
+    : createListPictureElement(currentDestination.pictures);
+
   const typeTemplate = createEventEditTypeTemplate(pointType);
 
   return `<li class="trip-events__item">
@@ -125,7 +130,7 @@ const createEditPointTemplate = (data) => {
                       <span class="visually-hidden">Price</span>
                       &euro;
                     </label>
-                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+                    <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${he.encode(price.toString())}">
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -137,12 +142,12 @@ const createEditPointTemplate = (data) => {
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-                    ${offersElements}
+                    ${listOffersElements}
                   </section>
 
                   <section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${currentDestination.description}</p>
+                    <p class="event__destination-description">${destination.length !== 0 ? currentDestination.description : ''}</p>
                     ${listPicturesElements}
                   </section>
                 </section>
@@ -186,6 +191,7 @@ export default class EditPointView extends SmartView{
     this.#setStartDatepicker();
     this.#setEndDatepicker();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   }
 
   setFormSubmitHandler = (callback) => {
@@ -194,12 +200,18 @@ export default class EditPointView extends SmartView{
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+  }
+
   #setStartDatepicker = () => {
     this.#datepicker = flatpickr(
       this.element.querySelector('#event-start-time-1'),
       {
         enableTime: true,
         dateFormat: 'd/m/y H:i',
+        time_24hr: true,
         defaultDate: this._data.date,
         onChange: this.#dateStartChangeHandler,
       },
@@ -212,6 +224,7 @@ export default class EditPointView extends SmartView{
       {
         enableTime: true,
         dateFormat: 'd/m/y H:i',
+        time_24hr: true,
         defaultDate: this._data.date,
         onChange: this.#dateEndChangeHandler,
       },
@@ -232,6 +245,13 @@ export default class EditPointView extends SmartView{
     });
   }
 
+  #priceHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      price: evt.target.value,
+    });
+  }
+
   #dateEndChangeHandler = ([userDate]) => {
     this.updateData({
       dateEnd: userDate,
@@ -248,14 +268,21 @@ export default class EditPointView extends SmartView{
   #setInnerHandlers = () => {
     this.element.querySelector('.event__type-list')
       .addEventListener('change', this.#typeToggleHandler);
-    this.element.querySelector('.event__field-group')
+    this.element.querySelector('.event__input--destination')
       .addEventListener('change', this.#cityToggleHandler);
+    this.element.querySelector('.event__input--price')
+      .addEventListener('change', this.#priceHandler);
 
   }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this._callback.formSubmit(EditPointView.parseDataToEvent(this._data));
+  }
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.deleteClick(EditPointView.parseDataToEvent(this._data));
   }
 
   static parseEventToData = (event) => ({... event,})

@@ -1,15 +1,16 @@
 import dayjs from 'dayjs';
 import AbstractView from './abstract-view';
 import {offersFilter, generateDuration} from '../utils/wayPoint';
+//import he from 'he';
 
 const createWayPointTemplate = (wayPoint) => {
   const {city, pointType, dateStart, dateEnd, isFavorite, offers, price} = wayPoint;
 
   const currentOffers = offersFilter(offers, pointType);
   const date = dayjs(dateStart).format('MMM D');
-  const timeStart = dayjs(dateStart).format('hh:mm');
-  const timeFinish = dayjs(dateEnd).format('hh:mm');
-  const durationEvent = dayjs(generateDuration(dateStart, dateEnd)).format('h[H] m[M]');
+  const timeStart = dayjs(dateStart).format('HH:mm');
+  const timeFinish = dayjs(dateEnd).format('HH:mm');
+  const durationEvent = dayjs(generateDuration(dateStart, dateEnd)).format('HH[H] mm[M]');
 
   const favorite = isFavorite !== false
     ? 'event__favorite-btn--active'
