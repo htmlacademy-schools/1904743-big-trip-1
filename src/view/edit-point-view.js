@@ -5,6 +5,7 @@ import {offersFilter, destinationFilter} from '../utils/wayPoint';
 import flatpickr from 'flatpickr';
 import {listCities} from '../const';
 import he from 'he';
+import {generateOffers} from '../utils/offers';
 
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
@@ -268,7 +269,7 @@ export default class EditPointView extends SmartView{
   #setInnerHandlers = () => {
     this.element.querySelector('.event__type-list')
       .addEventListener('change', this.#typeToggleHandler);
-    this.element.querySelector('.event__field-group')
+    this.element.querySelector('.event__input--destination')
       .addEventListener('change', this.#cityToggleHandler);
     this.element.querySelector('.event__input--price')
       .addEventListener('change', this.#priceHandler);

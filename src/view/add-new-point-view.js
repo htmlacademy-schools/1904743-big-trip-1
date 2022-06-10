@@ -5,6 +5,8 @@ import {destinationFilter, offersFilter} from '../utils/wayPoint';
 import he from 'he';
 import SmartView from './smart-view';
 import flatpickr from 'flatpickr';
+import {generateOffers} from '../utils/offers';
+import {generateDestination} from '../utils/destination';
 
 const createCitiesElement = (listCity) =>`<option value="${listCity}"></option>`;
 
@@ -41,33 +43,31 @@ const createPictureElement = (picture) =>(`<img class="event__photo" src=${pictu
 
 const createAddNewPointTemplate = (wayPoint= {}) => {
   const{
-    city = null,
+    city = '',
     pointType = '',
     price = '',
-    offers = [],
+    offers = generateOffers(),
     dateEnd = null,
     dateStart = null,
-    destination = [],
+    destination = generateDestination(),
   } = wayPoint;
 
-  const timeStart = dayjs(dateStart).format('DD/MM/YY HH:mm');
-  const timeFinish = dayjs(dateEnd).format('DD/MM/YY HH:mm');
-  const currentDestination = destinationFilter(city, destination);
+  const timeStart = dateStart !== null ? dayjs(dateStart).format('DD/MM/YY HH:mm') : '';
+  const timeFinish = dateEnd !== null ?dayjs(dateEnd).format('DD/MM/YY HH:mm'): '';
+  const currentDestination = city !== '' ? destinationFilter(city, destination): '';
 
   //const offersElements = offersFilter(offers, pointType).map(createOffersElement).join('');
   const citiesElements = listCities.map(createCitiesElement).join('');
-  const offersElements = offers.length === 0
+  const offersElements = pointType === ''
     ? ''
     : `<div class="event__available-offers">${offersFilter(offers, pointType).map(createOffersElement).join('')}</div>`;
 
-  const listOffersElements = offers.length === 0
+  const listOffersElements = pointType === ''
     ? ''
-    : `<section class="event__details">
-                  <section class="event__section  event__section--offers">
+    : `<section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
                     ${offersElements}
        </section>`;
-
 
   const createListPictureElement = () =>(
     `<div class="event__photos-container">
@@ -76,20 +76,26 @@ const createAddNewPointTemplate = (wayPoint= {}) => {
           </div>
         </div>`);
 
-  const listPicturesElements = destination.length === 0
+  const listPicturesElements = currentDestination === ''
     ? ''
     : createListPictureElement(currentDestination.pictures);
 
-  const createListDestination = destination.length === 0
+  const createListDestination = currentDestination === ''
     ? ''
-    : `section class="event__section  event__section--destination">
+    : `<section class="event__section  event__section--destination">
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                    <p class="event__destination-description">${destination.length !== 0 ? currentDestination.description : ''}</p>
+                    <p class="event__destination-description">${currentDestination.description}</p>
                     ${listPicturesElements}
                   </section>`;
 
+  const eventDetails = pointType === ''
+    ? ''
+    : `<section class="event__details">
+         ${listOffersElements}
+         ${createListDestination}
+       </section>`;
 
-  const typeTemplate = createEventEditTypeTemplate(pointType);
+  const typeTemplate = pointType === '' ? createEventEditTypeTemplate(''): createEventEditTypeTemplate(pointType);
 
   return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -113,7 +119,7 @@ const createAddNewPointTemplate = (wayPoint= {}) => {
                     <label class="event__label  event__type-output" for="event-destination-1">
                       ${pointType}
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${city} list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
                     <datalist id="destination-list-1">
                       ${citiesElements}
                     </datalist>
@@ -141,20 +147,17 @@ const createAddNewPointTemplate = (wayPoint= {}) => {
                     <span class="visually-hidden">Open event</span>
                   </button>
                 </header>
-                <section class="event__details">
-                    ${listOffersElements}
-                    ${createListDestination}
-                </section>
+                ${eventDetails}
               </form>
             </li>`;
 };
 
-export default class EditPointView extends SmartView{
+export default class AddNewPointView extends SmartView{
   #datepicker = null;
 
   constructor(wayPoint) {
     super();
-    this._data = EditPointView.parseEventToData(wayPoint);
+    this._data = AddNewPointView.parseEventToData(wayPoint);
 
     this.#setInnerHandlers();
     this.#setStartDatepicker();
@@ -176,7 +179,7 @@ export default class EditPointView extends SmartView{
 
   reset = (event) => {
     this.updateData(
-      EditPointView.parseEventToData(event),
+      AddNewPointView.parseEventToData(event),
     );
   }
 
@@ -271,12 +274,12 @@ export default class EditPointView extends SmartView{
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(EditPointView.parseDataToEvent(this._data));
+    this._callback.formSubmit(AddNewPointView.parseDataToEvent(this._data));
   }
 
   #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.deleteClick(EditPointView.parseDataToEvent(this._data));
+    this._callback.deleteClick(AddNewPointView.parseDataToEvent(this._data));
   }
 
   static parseEventToData = (event) => ({... event,})

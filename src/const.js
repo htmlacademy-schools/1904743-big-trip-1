@@ -34,6 +34,6 @@ export const FilterType = {
   PAST: 'past',
 };
 
-export const listCities = ['Tokio', 'Moscow', 'Denver', 'Rio', 'Paris', 'Kiev', 'Sydney', 'Lisbon', 'Berlin', 'Madrid', 'Barcelona'];
+export const listCities = ['Tokyo', 'Moscow', 'Denver', 'Rio', 'Paris', 'Kiev', 'Sydney', 'Lisbon', 'Berlin', 'Madrid', 'Barcelona'];
 
 export const TYPE = Object.values(Type);
